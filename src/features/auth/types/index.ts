@@ -20,6 +20,7 @@ export interface User {
 
 export interface AuthSliceState {
   isAuthenticated: boolean;
+  isInitialized: boolean;
   user?: User;
   loginErrorMessage?: string;
 }

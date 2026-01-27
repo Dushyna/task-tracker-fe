@@ -5,7 +5,7 @@ export function mapTaskFromApi(data: TaskDto): Task {
         id: data.id,
         title: data.title,
         description: data.description,
-        statusId: data.status.id,
-        projectId: data.project.id,
+        statusId: data.status?.id ?? '',
+        projectId: data.project?.id ?? '',
     };
 }

@@ -4,14 +4,22 @@ import type { Task } from "../../tasks/types";
 import {Column} from "./Column.tsx";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { getTasksByProjectId, updateTask, createTask, selectTasks } from "../../tasks/slice/tasksSlice";
-import {getProjectById, selectCurrentProject} from "../slice/projectsSlice";
-import {getAllTaskStatuses, selectSortedTaskStatuses, createTaskStatus,updateTaskStatus} from "../../statuses/slice/taskStatusSlice";
+import {getProjectById, inviteUser, selectCurrentProject, selectInviteUserErrorMessage} from "../slice/projectsSlice";
+import {
+    getAllTaskStatuses,
+    selectSortedTaskStatuses,
+    createTaskStatus,
+    updateTaskStatus
+} from "../../statuses/slice/taskStatusSlice";
 import { CreateStatusModal } from "./CreateStatusModal";
 import {TaskModal} from "./TaskModal.tsx";
 import type { DragEndEvent } from "@dnd-kit/core";
 import { DndContext, PointerSensor, useSensor, useSensors, rectIntersection } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import {SortableTask} from "./SortableTask.tsx";
+import {InviteModal} from "./InviteModal.tsx";
+import type {ProjectRole} from "../types";
+import {CollaboratorsList} from "./CollaboratorsList.tsx";
 
 export default function KanbanBoard() {
     const { projectId } = useParams<{ projectId: string }>();
@@ -21,11 +29,12 @@ export default function KanbanBoard() {
     const tasks = useAppSelector(selectTasks);
     const project = useAppSelector(selectCurrentProject);
     const statuses = useAppSelector(selectSortedTaskStatuses);
-
+    const inviteError = useAppSelector(selectInviteUserErrorMessage);
 
     const [modalOpen, setModalOpen] = useState(false);
     const [currentStatusId, setCurrentStatusId] = useState<string | null>(null);
     const [statusModalOpen, setStatusModalOpen] = useState(false);
+    const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
 
 
     useEffect(() => {
@@ -47,10 +56,8 @@ export default function KanbanBoard() {
         }, {});
     }, [tasks, statuses]);
 
-    // DnD sensors
     const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }));
 
-    // Drag End
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event;
         if (!over) return;
@@ -74,7 +81,6 @@ export default function KanbanBoard() {
         dispatch(updateTask({ id: activeId, dto: { statusId: newStatusId } }));
     };
 
-    // Open modal for specific status
     const openModal = (statusId: string) => {
         setCurrentStatusId(statusId);
         setModalOpen(true);
@@ -100,7 +106,6 @@ export default function KanbanBoard() {
             Math.min(position, statuses.length)
         );
 
-        // ❗ Сдвигаем существующие колонки
         statuses
             .filter(s => s.position >= normalizedPosition)
             .sort((a, b) => b.position - a.position) // 👈 важно!
@@ -124,6 +129,22 @@ export default function KanbanBoard() {
         setStatusModalOpen(false);
     };
 
+
+    const handleInviteSubmit = async (email: string, role: ProjectRole) => {
+        if (project?.id) {
+            const result = await dispatch(inviteUser({
+                id: project.id,
+                dto: { email, role}
+            }));
+
+            if (inviteUser.fulfilled.match(result)) {
+                setIsInviteModalOpen(false);
+            }
+        }
+    };
+
+
+
     return (
         <div className="h-screen bg-slate-100 p-4 flex flex-col">
             <div className="flex items-center gap-4 mb-4 text-black">
@@ -133,11 +154,28 @@ export default function KanbanBoard() {
 
                 <button
                     onClick={() => setStatusModalOpen(true)}
-                    className="bg-green-600 text-white px-3 py-1.5 rounded text-sm hover:bg-green-700"
+                    className="bg-blue-600 text-white px-3 py-1.5 rounded text-sm hover:bg-blue-700"
                 >
-                    + Добавить статус
+                    + Add Status
                 </button>
+                <button
+                    onClick={() => setIsInviteModalOpen(true)}
+                    className="bg-blue-600 text-white px-3 py-1.5 rounded text-sm hover:bg-blue-700 transition"
+                >
+                    + Add collaborators
+                </button>
+
+                {project && (
+                    <CollaboratorsList
+                        collaborators={project.projectTeam}
+                        onInviteClick={() => setIsInviteModalOpen(true)}
+                    />
+                )}
+
             </div>
+
+
+
 
             <DndContext sensors={sensors} collisionDetection={rectIntersection} onDragEnd={handleDragEnd}>
                 <div className="flex gap-4 overflow-x-auto">
@@ -174,6 +212,14 @@ export default function KanbanBoard() {
                 onCreate={handleCreateStatus}
                 maxPosition={statuses.length}
             />
+
+            <InviteModal
+                isOpen={isInviteModalOpen}
+                onClose={() => setIsInviteModalOpen(false)}
+                onInvite={handleInviteSubmit}
+                error={inviteError}
+            />
+
 
         </div>
     );

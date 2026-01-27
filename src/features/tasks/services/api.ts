@@ -20,6 +20,10 @@ export const fetchCreateTask = async (taskDto: CreateTaskDto) => {
   const res = await axiosInstance.post(TASKS_BASE_PATH, taskDto);
   return res.data;
 };
+export const fetchDeleteTask = async (id: string) => {
+    await axiosInstance.delete(`/tasks/${id}`);
+};
+
 
 export const fetchUpdateTask = async (id: string,taskDto: UpdateTaskDto) => {
     const res = await axiosInstance.patch(`${TASKS_BASE_PATH}/${id}`, taskDto);

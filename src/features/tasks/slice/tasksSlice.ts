@@ -108,6 +108,20 @@ export const tasksSlice = createAppSlice({
                 },
             }
         ),
+
+            deleteTask: create.asyncThunk(
+                async (id: string) => {
+                    await api.fetchDeleteTask(id);
+                    return id;
+                },
+                {
+                    fulfilled: (state, action) => {
+                        state.tasks = state.tasks.filter(t => t.id !== action.payload);
+                    }
+                }
+            )
+
+
     }),
 
 
@@ -123,7 +137,7 @@ export const tasksSlice = createAppSlice({
 );
 
 // // Action creators are generated for each case reducer function.
-export const {createTask, getTasksByProjectId, updateTask} = tasksSlice.actions;
+export const {createTask, getTasksByProjectId, updateTask, deleteTask} = tasksSlice.actions;
 
 // Selectors returned by `slice.selectors` take the root state as their first argument.
 export const {

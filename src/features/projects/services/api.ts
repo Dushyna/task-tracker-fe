@@ -1,14 +1,20 @@
 import axiosInstance from "../../../lib/axiosInstance";
-import type { CreateProjectDto } from "../types";
+import type {CreateProjectDto, InviteRequestDto, Project} from "../types";
 
 // we already added  prefix /api in axios config
 
 const PROJECTS_BASE_PATH = "/projects";
 
-export const fetchProjects = async () => {
+export const fetchProjects = async (): Promise<Project[]> => {
   const res = await axiosInstance.get(PROJECTS_BASE_PATH);
   return res.data;
 };
+
+export const fetchInviteUser = async (id: string, inviteDto: InviteRequestDto) => {
+    const res = await axiosInstance.post(`${PROJECTS_BASE_PATH}/${id}/invite`, inviteDto);
+    return res.data;
+};
+
 
 
 

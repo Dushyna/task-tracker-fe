@@ -5,6 +5,7 @@ import {isAxiosError} from "axios";
 
 const initialState: AuthSliceState = {
     isAuthenticated: false,
+    isInitialized: false,
     user: undefined,
 };
 
@@ -68,10 +69,12 @@ export const authSlice = createAppSlice({
                 fulfilled: (state, action) => {
                     state.isAuthenticated = true;
                     state.user = action.payload;
+                    state.isInitialized = true;
                 },
                 rejected: (state, action) => {
                     state.isAuthenticated = false;
                     state.user = undefined;
+                    state.isInitialized = true;
                     console.log("CheckAuth failed!", action.error.message);
                 },
             }
@@ -92,6 +95,7 @@ export const authSlice = createAppSlice({
 
     selectors: {
         selectIsAuthenticated: (state) => state.isAuthenticated,
+        selectInitialized: (state) => state.isInitialized,
         selectUser: (state) => state.user,
         selectRole: (state) => state.user?.role,
         selectLoginError: (state) => state?.loginErrorMessage,
@@ -103,6 +107,7 @@ export const {login, register, checkAuth, logout} = authSlice.actions;
 
 export const {
     selectIsAuthenticated,
+    selectInitialized,
     selectUser,
     selectLoginError,
 } = authSlice.selectors;

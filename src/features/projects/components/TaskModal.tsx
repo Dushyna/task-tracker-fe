@@ -45,23 +45,9 @@ export function TaskModal({
     if (!isOpen) return null;
 
     const handleSubmit = () => {
-        const titlePattern = /^[A-Z][a-zA-Z0-9 ]{2,49}$/;
-        const descriptionPattern = /^[A-Z][a-zA-Z0-9 ]{2,200}$/;
 
         if (title.trim() === "") {
             setError("Title is required.");
-            return;
-        }
-
-        if (!titlePattern.test(title)) {
-            setError(
-                "Title must start with a capital letter, contain only letters, numbers or spaces, and be 3-50 characters long."
-            );
-            return;
-        }
-
-        if (!descriptionPattern.test(description)) {
-            setError("Description must start with a capital letter, contain only letters, numbers or spaces, and be 3-200 characters long.");
             return;
         }
 

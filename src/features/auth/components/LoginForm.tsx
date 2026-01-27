@@ -4,7 +4,10 @@ import {checkAuth, login, selectLoginError} from "../slice/authSlice";
 import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 import {useNavigate} from "react-router-dom";
 
-const LoginForm = () => {
+type LoginFormProps = {
+    emailConfirmed?: boolean; }
+
+const LoginForm = ({emailConfirmed}: LoginFormProps) => {
     const dispatch = useAppDispatch();
     const loginError = useAppSelector(selectLoginError);
     const navigate = useNavigate();
@@ -35,6 +38,12 @@ const LoginForm = () => {
         <div className="mx-auto max-w-sm space-y-6 p-6 rounded-lg border bg-white shadow-sm mt-10">
             <div className="space-y-2 text-center">
                 <h1 className="text-2xl font-semibold tracking-tight">Sign in</h1>
+                {emailConfirmed && (
+                    <div className="rounded-md bg-green-50 p-3 text-sm text-green-700 border border-green-200">
+                        🎉 Your email has been confirmed! Please log in.
+                    </div>
+                )}
+
                 <p className="text-sm text-muted-foreground text-gray-500">
                     Enter your email and password to sign in
                 </p>

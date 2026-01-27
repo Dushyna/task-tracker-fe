@@ -1,5 +1,5 @@
 import { createAppSlice } from "../../../app/createAppSlice";
-import type { CreateProjectDto, ProjectsSliceState } from "../types";
+import type {CreateProjectDto, Project, InviteRequestDto, ProjectsSliceState} from "../types";
 import * as api from "../services/api";
 import { isAxiosError, type AxiosError } from "axios";
 
@@ -18,8 +18,6 @@ export const projectsSlice = createAppSlice({
         return api
           .fetchProjects()
           .catch((err: AxiosError<{ message: string }>) => {
-            // раскрываем ошибку от аксиоса и получаем сообщение
-            // бросаем новую ошибку, которая поподет в rejected case
             throw new Error(err.response?.data?.message);
           });
       },
@@ -66,7 +64,7 @@ export const projectsSlice = createAppSlice({
     ),
 
       getProjectById: create.asyncThunk(
-          async (id: string) => {
+          async (id: string):Promise<Project> => {
               return api.fetchProjectById(id).catch(
                   (err: AxiosError<{ message: string }>) => {
                       throw new Error(err.response?.data?.message);
@@ -89,6 +87,39 @@ export const projectsSlice = createAppSlice({
               },
           }
       ),
+      inviteUser: create.asyncThunk(
+          async ({ id, dto }: { id: string; dto: InviteRequestDto }) => {
+              try {
+                  return await api.fetchInviteUser(id, dto);
+              } catch (err) {
+                  if (isAxiosError(err)) {
+                      throw new Error(err.response?.data?.message || "Failed to invite user");
+                  }
+                  throw err;
+              }
+          },
+          {
+              pending: (state) => {
+                  state.inviteUserErrorMessage = "";
+              },
+              fulfilled: (state, action) => {
+                  state.inviteUserErrorMessage = "";
+                  const newCollaborator = action.payload;
+                  if (state.currentProject && newCollaborator) {
+                      if (!state.currentProject.projectTeam) state.currentProject.projectTeam = [];
+                      state.currentProject.projectTeam.push(newCollaborator);
+                  }
+                  const projectInList = state.projects.find(p => p.id === state.currentProject?.id);
+                  if (projectInList && newCollaborator) {
+                      if (!projectInList.projectTeam) projectInList.projectTeam = [];
+                      projectInList.projectTeam.push(newCollaborator);
+                  }
+              },
+              rejected: (state, action) => {
+                  state.inviteUserErrorMessage = action.error.message;
+              },
+          }
+      ),
 
 
 
@@ -101,11 +132,13 @@ export const projectsSlice = createAppSlice({
     selectCurrentProject: state => state.currentProject,
     selectIsLoading: (state) => state.isLoading,
     selectCreateProjectErrorMessage: (state) => state.createProjectErrorMessage,
-  },
+    selectInviteUserErrorMessage: (state) => state.inviteUserErrorMessage,
+
+},
 });
 
 // // Action creators are generated for each case reducer function.
-export const { createProject, getAllProjects, getProjectById } = projectsSlice.actions;
+export const { createProject, getAllProjects, getProjectById, inviteUser } = projectsSlice.actions;
 
 // Selectors returned by `slice.selectors` take the root state as their first argument.
 export const {
@@ -113,4 +146,5 @@ export const {
   selectIsLoading,
   selectCurrentProject,
   selectCreateProjectErrorMessage,
+    selectInviteUserErrorMessage,
 } = projectsSlice.selectors;
