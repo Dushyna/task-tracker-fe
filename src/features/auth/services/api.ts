@@ -55,7 +55,6 @@ export const fetchResetPassword = async (data: ResetPasswordData) => {
         throw new Error(message);
     }
 };
-
 export const fetchRefreshToken = async ():Promise<void> => {
     await axiosInstance.post(TOKEN_REFRESH_PATH, {}, {withCredentials: true});
 };

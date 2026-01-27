@@ -95,5 +95,4 @@ const ResetPasswordForm = () => {
         </div>
     );
 };
-
 export default ResetPasswordForm;

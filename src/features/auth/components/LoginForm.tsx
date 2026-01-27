@@ -122,5 +122,4 @@ const LoginForm = ({emailConfirmed}: LoginFormProps) => {
         </div>
     );
 };
-
 export default LoginForm;

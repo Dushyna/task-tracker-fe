@@ -63,8 +63,7 @@ export const authSlice = createAppSlice({
 
         checkAuth: create.asyncThunk(
             async () => {
-                return fetchCurrentUser();
-            },
+                return fetchCurrentUser();},
             {
                 fulfilled: (state, action) => {
                     state.isAuthenticated = true;
@@ -101,7 +100,6 @@ export const authSlice = createAppSlice({
         selectLoginError: (state) => state?.loginErrorMessage,
     },
 });
-
 
 export const {login, register, checkAuth, logout} = authSlice.actions;
 

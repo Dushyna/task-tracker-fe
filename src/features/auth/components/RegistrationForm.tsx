@@ -106,7 +106,6 @@ const RegistrationForm = () => {
                     )}
                 </div>
 
-
                 {/* Confirm Password Field */}
                 <div className="space-y-2">
                     <label
