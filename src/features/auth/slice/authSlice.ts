@@ -1,6 +1,6 @@
 import {createAppSlice} from "../../../app/createAppSlice";
 import type {AuthSliceState, Credentials, UserRegistrationDto,} from "../types";
-import * as api from "../services/api";
+import {fetchLogin, fetchRegister, fetchCurrentUser, fetchLogout} from "../services/api";
 import {isAxiosError} from "axios";
 
 const initialState: AuthSliceState = {
@@ -14,12 +14,13 @@ export const authSlice = createAppSlice({
     reducers: (create) => ({
         login: create.asyncThunk(
             async (credentials: Credentials) => {
-                return api.fetchLogin(credentials).catch((err) => {
+                return fetchLogin(credentials).catch((err: unknown) => {
                     if (isAxiosError(err)) {
                         throw new Error(
                             err.response?.data?.message || "Internal Server Error"
                         );
                     }
+                    throw err;
                 });
             },
             {
@@ -39,25 +40,9 @@ export const authSlice = createAppSlice({
             }
         ),
 
-        logout: create.asyncThunk(
-            async () => {
-                return api.fetchLogout();
-            },
-            {
-                fulfilled: (state) => {
-                    state.isAuthenticated = false;
-                    state.user = undefined;
-                },
-                rejected: (state) => {
-                    state.isAuthenticated = false;
-                    state.user = undefined;
-                },
-            }
-        ),
-
         register: create.asyncThunk(
             async (dto: UserRegistrationDto) => {
-                return api.fetchRegister(dto);
+                return fetchRegister(dto);
                 // The value we return becomes the `fulfilled` action payload
             },
             {
@@ -77,7 +62,7 @@ export const authSlice = createAppSlice({
 
         checkAuth: create.asyncThunk(
             async () => {
-                return api.fetchCurrentUser();
+                return fetchCurrentUser();
             },
             {
                 fulfilled: (state, action) => {
@@ -90,10 +75,21 @@ export const authSlice = createAppSlice({
                     console.log("CheckAuth failed!", action.error.message);
                 },
             }
-        )
+        ),
+        logout: create.asyncThunk(
+            async () => {
+                await fetchLogout();
+            },
+            {
+                fulfilled: (state) => {
+                    state.isAuthenticated = false;
+                    state.user = undefined;
+                    state.loginErrorMessage = undefined;
+                },
+            }
+        ),
     }),
-    // You can define your selectors here. These selectors receive the slice
-    // state as their first argument.
+
     selectors: {
         selectIsAuthenticated: (state) => state.isAuthenticated,
         selectUser: (state) => state.user,
@@ -102,13 +98,11 @@ export const authSlice = createAppSlice({
     },
 });
 
-// // Action creators are generated for each case reducer function.
+
 export const {login, register, checkAuth, logout} = authSlice.actions;
 
-// Selectors returned by `slice.selectors` take the root state as their first argument.
 export const {
     selectIsAuthenticated,
     selectUser,
-    selectRole,
     selectLoginError,
 } = authSlice.selectors;

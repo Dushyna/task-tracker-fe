@@ -41,20 +41,20 @@ export default function Header() {
                     </Link>
 
                     <nav className="flex items-center space-x-8">
-                        <Link 
-                            to="/" 
+                        <Link
+                            to="/"
                             className="text-sm font-bold text-white hover:text-cyan-400 hover:scale-[1.35] hover:drop-shadow-[0_0_15px_rgba(6,182,212,1)] hover:text-shadow-[0_0_10px_rgba(6,182,212,0.8)] transition-all duration-300 ease-in-out"
                         >
                             Home
                         </Link>
-                        <Link 
-                            to="/about" 
+                        <Link
+                            to="/about"
                             className="text-sm font-bold text-white hover:text-cyan-400 hover:scale-[1.35] hover:drop-shadow-[0_0_15px_rgba(6,182,212,1)] hover:text-shadow-[0_0_10px_rgba(6,182,212,0.8)] transition-all duration-300 ease-in-out"
                         >
                             About
                         </Link>
-                        <Link 
-                            to="/projects" 
+                        <Link
+                            to="/projects"
                             className="text-sm font-bold text-white hover:text-cyan-400 hover:scale-[1.35] hover:drop-shadow-[0_0_15px_rgba(6,182,212,1)] hover:text-shadow-[0_0_10px_rgba(6,182,212,0.8)] transition-all duration-300 ease-in-out"
                         >
                             Projects
@@ -75,14 +75,14 @@ export default function Header() {
                                 </>
                             ) : (
                                 <>
-                                    <Link 
-                                        to="/register" 
+                                    <Link
+                                        to="/register"
                                         className="text-sm font-bold text-white hover:text-cyan-400 hover:scale-[1.35] hover:drop-shadow-[0_0_15px_rgba(6,182,212,1)] hover:text-shadow-[0_0_10px_rgba(6,182,212,0.8)] transition-all duration-300 ease-in-out"
                                     >
                                         Sign up
                                     </Link>
-                                    <Link 
-                                        to="/login" 
+                                    <Link
+                                        to="/login"
                                         className="rounded-xl bg-cyan-500 border border-cyan-300/50 px-6 py-2.5 text-sm font-black text-white shadow-[0_0_20px_rgba(6,182,212,0.6)] hover:scale-[1.35] hover:bg-cyan-400 hover:shadow-[0_0_35px_rgba(6,182,212,0.9)] hover:text-shadow-[0_0_10px_rgba(255,255,255,0.8)] transition-all duration-300 ease-in-out"
                                     >
                                         Sign in

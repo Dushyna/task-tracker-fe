@@ -88,6 +88,15 @@ const LoginForm = () => {
                         }`}
                         placeholder="••••••••"
                     />
+                    <div className="text-right">
+                        <button
+                            type="button"
+                            onClick={() => navigate('/forgot-password')}
+                            className="text-sm text-blue-500 hover:underline"
+                        >
+                            Forgot password?
+                        </button>
+                    </div>
                     {formik.touched.password && formik.errors.password && (
                         <p className="text-sm text-red-500">{formik.errors.password}</p>
                     )}
