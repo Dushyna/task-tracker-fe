@@ -1,13 +1,12 @@
 import {Link, useNavigate} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../app/hooks.ts";
-import {logout, selectInitialized, selectIsAuthenticated, selectUser} from "../../features/auth/slice/authSlice.ts";
+import {logout, selectIsAuthenticated, selectUser} from "../../features/auth/slice/authSlice.ts";
 
 export default function Header() {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const isAuthenticated = useAppSelector(selectIsAuthenticated);
     const user = useAppSelector(selectUser);
-    const initialized = useAppSelector(selectInitialized);
 
     const handleLogout = async () => {
         await dispatch(logout());
@@ -42,61 +41,52 @@ export default function Header() {
                     </Link>
 
                     <nav className="flex items-center space-x-8">
-                        <Link 
-                            to="/" 
+                        <Link
+                            to="/"
                             className="text-sm font-bold text-white hover:text-cyan-400 hover:scale-[1.35] hover:drop-shadow-[0_0_15px_rgba(6,182,212,1)] hover:text-shadow-[0_0_10px_rgba(6,182,212,0.8)] transition-all duration-300 ease-in-out"
                         >
                             Home
                         </Link>
-                        <Link 
-                            to="/about" 
+                        <Link
+                            to="/about"
                             className="text-sm font-bold text-white hover:text-cyan-400 hover:scale-[1.35] hover:drop-shadow-[0_0_15px_rgba(6,182,212,1)] hover:text-shadow-[0_0_10px_rgba(6,182,212,0.8)] transition-all duration-300 ease-in-out"
                         >
                             About
                         </Link>
-                        <Link 
-                            to="/projects" 
+                        <Link
+                            to="/projects"
                             className="text-sm font-bold text-white hover:text-cyan-400 hover:scale-[1.35] hover:drop-shadow-[0_0_15px_rgba(6,182,212,1)] hover:text-shadow-[0_0_10px_rgba(6,182,212,0.8)] transition-all duration-300 ease-in-out"
                         >
                             Projects
                         </Link>
 
-                        <div
-                            className="flex items-center space-x-4 ml-6 min-w-[350px] flex-shrink-0 transition-all duration-300"
-                        >
-                            {initialized ? (
-                                isAuthenticated ? (
-                                    <>
-                                        <span className="text-sm font-bold text-cyan-400/80 italic">
-                                            {user?.email}
-                                        </span>
-                                        <button
-                                            onClick={handleLogout}
-                                            className="rounded-xl bg-cyan-500 border border-cyan-300/50 px-6 py-2.5 text-sm font-black text-white shadow-[0_0_20px_rgba(6,182,212,0.6)] hover:scale-[1.35] hover:bg-cyan-400 hover:shadow-[0_0_35px_rgba(6,182,212,0.9)] hover:text-shadow-[0_0_10px_rgba(255,255,255,0.8)] transition-all duration-300 ease-in-out"
-                                        >
-                                            Logout
-                                        </button>
-                                    </>
-                                ) : (
-                                    <>
-                                        <Link
-                                            to="/register"
-                                            className="text-sm font-bold text-white hover:text-cyan-400 hover:scale-[1.35] hover:drop-shadow-[0_0_15px_rgba(6,182,212,1)] hover:text-shadow-[0_0_10px_rgba(6,182,212,0.8)] transition-all duration-300 ease-in-out"
-                                        >
-                                            Sign up
-                                        </Link>
-                                        <Link
-                                            to="/login"
-                                            className="rounded-xl bg-cyan-500 border border-cyan-300/50 px-6 py-2.5 text-sm font-black text-white shadow-[0_0_20px_rgba(6,182,212,0.6)] hover:scale-[1.35] hover:bg-cyan-400 hover:shadow-[0_0_35px_rgba(6,182,212,0.9)] hover:text-shadow-[0_0_10px_rgba(255,255,255,0.8)] transition-all duration-300 ease-in-out"
-                                        >
-                                            Sign in
-                                        </Link>
-                                    </>
-                                )
+                        <div className="flex items-center space-x-4 ml-6">
+                            {isAuthenticated ? (
+                                <>
+                                    <span className="text-sm font-bold text-cyan-400/80 italic">
+                                        {user?.email}
+                                    </span>
+                                    <button
+                                        onClick={handleLogout}
+                                        className="text-sm font-bold text-white hover:text-cyan-400 hover:scale-[1.35] hover:drop-shadow-[0_0_15px_rgba(6,182,212,1)] hover:text-shadow-[0_0_10px_rgba(6,182,212,0.8)] transition-all duration-300 ease-in-out"
+                                    >
+                                        Logout
+                                    </button>
+                                </>
                             ) : (
                                 <>
-                                    <div className="h-5 w-24 bg-slate-950/90 rounded animate-pulse"></div>
-                                    <div className="h-10 w-20 bg-slate-950/90 rounded animate-pulse"></div>
+                                    <Link
+                                        to="/register"
+                                        className="text-sm font-bold text-white hover:text-cyan-400 hover:scale-[1.35] hover:drop-shadow-[0_0_15px_rgba(6,182,212,1)] hover:text-shadow-[0_0_10px_rgba(6,182,212,0.8)] transition-all duration-300 ease-in-out"
+                                    >
+                                        Sign up
+                                    </Link>
+                                    <Link
+                                        to="/login"
+                                        className="rounded-xl bg-cyan-500 border border-cyan-300/50 px-6 py-2.5 text-sm font-black text-white shadow-[0_0_20px_rgba(6,182,212,0.6)] hover:scale-[1.35] hover:bg-cyan-400 hover:shadow-[0_0_35px_rgba(6,182,212,0.9)] hover:text-shadow-[0_0_10px_rgba(255,255,255,0.8)] transition-all duration-300 ease-in-out"
+                                    >
+                                        Sign in
+                                    </Link>
                                 </>
                             )}
                         </div>

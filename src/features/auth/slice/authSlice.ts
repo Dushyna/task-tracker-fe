@@ -1,6 +1,11 @@
 import {createAppSlice} from "../../../app/createAppSlice";
 import type {AuthSliceState, Credentials, UserRegistrationDto,} from "../types";
-import {fetchLogin, fetchRegister, fetchCurrentUser, fetchLogout} from "../services/api";
+import {
+    fetchLogin,
+    fetchRegister,
+    fetchCurrentUser,
+    fetchLogout,
+} from "../services/api";
 import {isAxiosError} from "axios";
 
 const initialState: AuthSliceState = {

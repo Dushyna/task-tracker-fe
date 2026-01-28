@@ -55,6 +55,13 @@ export const fetchResetPassword = async (data: ResetPasswordData) => {
         throw new Error(message);
     }
 };
+
+export const fetchValidateResetToken = async (token: string): Promise<void> => {
+    await axiosInstance.get("/auth/reset-password/validate", {
+        params: { token },
+    });
+};
+
 export const fetchRefreshToken = async ():Promise<void> => {
     await axiosInstance.post(TOKEN_REFRESH_PATH, {}, {withCredentials: true});
 };

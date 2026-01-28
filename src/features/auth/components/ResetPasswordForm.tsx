@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import axiosInstance from "../../../lib/axiosInstance";
-import { fetchResetPassword } from "../services/api";
+import {fetchResetPassword, fetchValidateResetToken} from "../services/api";
 
 const ResetPasswordForm = () => {
     const [searchParams] = useSearchParams();
@@ -20,11 +19,9 @@ const ResetPasswordForm = () => {
             return;
         }
 
-        const validateToken = async () => {
+        const validate = async () => {
             try {
-                await axiosInstance.get("/auth/reset-password/validate", {
-                    params: { token },
-                });
+                await fetchValidateResetToken(token);
                 setLoading(false);
             } catch {
                 setError("Reset link is invalid or expired");
@@ -32,7 +29,7 @@ const ResetPasswordForm = () => {
             }
         };
 
-        validateToken();
+        validate();
     }, [token]);
 
     const handleSubmit = async (e: React.FormEvent) => {
