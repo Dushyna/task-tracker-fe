@@ -54,6 +54,7 @@ const LoginForm = ({emailConfirmed}: LoginFormProps) => {
                 )}
             </div>
             <form onSubmit={formik.handleSubmit} className="space-y-4">
+
                 {/* Email Field */}
                 <div className="space-y-2">
                     <label
