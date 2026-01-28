@@ -13,11 +13,16 @@ export const fetchCreateTaskStatus = async (taskStatusDto: CreateTaskStatusDto) 
 };
 
 export const fetchUpdateTaskStatus = async (taskStatusDto: UpdateTaskStatusDto) => {
-    const res = await axiosInstance.post(STATUS_BASE_PATH, taskStatusDto);
+    const res = await axiosInstance.patch(STATUS_BASE_PATH, taskStatusDto);
     return res.data;
 };
 
 export const fetchTaskStatuses = async (id:string) => {
     const res = await axiosInstance.get(`${PROJECTS_BASE_PATH}/${id}/status`);
+    return res.data;
+};
+
+export const fetchDeleteTaskStatus = async (id: string) => {
+    const res = await axiosInstance.delete(`${STATUS_BASE_PATH}/${id}`);
     return res.data;
 };
