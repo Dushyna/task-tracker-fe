@@ -8,7 +8,6 @@ const REGISTER_PATH = "/users/register";
 const GET_CURRENT_USER_PATH = "/auth/me";
 const LOGOUT_PATH = "/auth/logout";
 
-
 export const TOKEN_REFRESH_PATH = "/auth/refresh-token";
 
 interface ResetPasswordData {

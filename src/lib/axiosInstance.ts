@@ -58,7 +58,6 @@ axiosInstance.interceptors.response.use(
                 try {
                     await fetchRefreshToken();
                     isRefreshing = false;
-
                     const res = await axiosInstance(originalRequest);
                     processQueue(null, res);
                     return res;

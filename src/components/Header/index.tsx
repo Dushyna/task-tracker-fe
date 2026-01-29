@@ -7,7 +7,6 @@ export default function Header() {
     const navigate = useNavigate();
     const isAuthenticated = useAppSelector(selectIsAuthenticated);
     const user = useAppSelector(selectUser);
-
     const handleLogout = async () => {
         await dispatch(logout());
         navigate("/login");

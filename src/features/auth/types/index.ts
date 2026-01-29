@@ -19,6 +19,7 @@ export interface User {
 }
 
 export interface AuthSliceState {
+  registerErrorMessage: any;
   isAuthenticated: boolean;
   isInitialized: boolean;
   user?: User;

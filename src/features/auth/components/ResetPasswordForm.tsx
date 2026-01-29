@@ -6,7 +6,6 @@ const ResetPasswordForm = () => {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const token = searchParams.get("token");
-
     const [newPassword, setNewPassword] = useState("");
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
