@@ -10,6 +10,11 @@ export const fetchProjects = async (): Promise<Project[]> => {
   return res.data;
 };
 
+export const fetchMyProjects = async (): Promise<Project[]> => {
+    const res = await axiosInstance.get(`${PROJECTS_BASE_PATH}/my`);
+    return res.data;
+};
+
 export const fetchInviteUser = async (id: string, inviteDto: InviteRequestDto) => {
     const res = await axiosInstance.post(`${PROJECTS_BASE_PATH}/${id}/invite`, inviteDto);
     return res.data;

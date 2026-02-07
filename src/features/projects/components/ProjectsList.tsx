@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { getAllProjects, selectProjects, deleteProject } from "../slice/projectsSlice";
+import { getMyProjects, selectProjects, deleteProject } from "../slice/projectsSlice";
 import NeonButton from "../../../components/ui/NeonButton";
 import ConfirmModal from "../../../components/ui/ConfirmModal"; // Твоя форма підтвердження
 
@@ -13,7 +13,7 @@ export default function ProjectsList() {
     const [isDeleting, setIsDeleting] = useState(false);
 
     useEffect(() => {
-        dispatch(getAllProjects());
+        dispatch(getMyProjects());
     }, [dispatch]);
 
     const openConfirm = (id: string, title: string) => {

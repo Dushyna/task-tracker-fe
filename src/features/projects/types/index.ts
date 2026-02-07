@@ -6,7 +6,7 @@ export interface Project {
     description: string;
     owner: EmployeeDto;
     projectTeam: CollaboratorDto[];
-    markers: MarkerDto[];
+    markers?: MarkerDto[];
     logs?: ProjectLog[];
 }
 
@@ -27,6 +27,7 @@ export interface EmployeeDto {
 
 export interface ProjectsSliceState {
     projects: Project[];
+    adminProjects: Project[],
     currentProject?: Project | null;
     createProjectErrorMessage?: string;
     inviteUserErrorMessage?: string;
