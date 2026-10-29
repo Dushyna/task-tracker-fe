@@ -74,7 +74,7 @@ export default function Header() {
                                             <div className="w-8 h-8 flex rounded-full bg-cyan-300 border-2 border-cyan-500 items-center justify-center text-xs text-white overflow-hidden">
                                                 {user?.avatarUrl ? (
                                                     <img
-                                                        src={`http://localhost:8080${user.avatarUrl}?t=${Date.now()}`}
+                                                        src={`${user.avatarUrl}?t=${Date.now()}`}
                                                         alt="avatar"
                                                         className="w-full h-full object-cover"
                                                     />

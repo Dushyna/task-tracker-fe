@@ -96,7 +96,7 @@ export const TaskComments: React.FC<TaskCommentsProps> = ({taskId}) => {
                         <div key={comment.id} className="flex gap-3 group relative">
                             <div className="flex-shrink-0">
                                 {comment.authorAvatarUrl ? (
-                                    <img src={`http://localhost:8080${comment.authorAvatarUrl}`}
+                                    <img src={`${comment.authorAvatarUrl}`}
                                          alt={comment.authorName}
                                          className="h-8 w-8 rounded-lg border border-cyan-500/30 shadow-[0_0_5px_rgba(6,182,212,0.2)]"/>
                                 ) : (

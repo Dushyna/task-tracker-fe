@@ -220,7 +220,7 @@ export default function Profile() {
                     >
                         {avatarPreview || avatarUrl ? (
                             <img
-                                src={avatarPreview || `http://localhost:8080${avatarUrl}`}
+                                src={avatarPreview || `${avatarUrl}`}
                                 alt="User_Avatar"
                                 className="w-full h-full object-cover"
                             />

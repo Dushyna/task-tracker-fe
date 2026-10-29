@@ -12,7 +12,7 @@ const ProjectLogItem = ({log}: ProjectLogsItemProps) => {
             <div className="flex items-center gap-2">
                 {log.userAvatar ? (
                     <img
-                        src={`http://localhost:8080${log.userAvatar}`}
+                        src={`${log.userAvatar}`}
                         alt="avatar"
                         className="h-7 w-7 rounded-full object-cover"
                     />
