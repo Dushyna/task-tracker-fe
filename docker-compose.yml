@@ -1,0 +1,18 @@
+version: '3.8'
+name: task-tracker-frontend
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: task-tracker-frontend-app
+    restart: unless-stopped
+    ports:
+      - "5173:80"
+    networks:
+      - app_net
+networks:
+  app_net:
+    name: mysql_network
+    external: true
