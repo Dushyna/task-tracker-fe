@@ -145,10 +145,9 @@ export default function KanbanBoard() {
 
                 <DragOverlay dropAnimation={dropAnimation}>
                     {activeTask && (
-                        <div className="bg-white rounded-xl p-3 border-2 border-cyan-500 shadow-2xl rotate-3 w-[300px] cursor-grabbing">
+                        <div className="bg-white rounded-xl p-3 border-2 border-cyan-500 shadow-2xl rotate-3 w-[260px] md:w-[300px] cursor-grabbing">
                             <div className="font-semibold text-black">{activeTask.title}</div>
-                        </div>
-                    )}
+                        </div>                    )}
                 </DragOverlay>
             </DndContext>
 
