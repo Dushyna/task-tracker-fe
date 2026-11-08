@@ -1,6 +1,6 @@
 import { useState } from "react";
 import {useSensor, useSensors,
-    PointerSensor, closestCorners, defaultDropAnimationSideEffects
+    PointerSensor, TouchSensor, closestCorners, defaultDropAnimationSideEffects
 } from "@dnd-kit/core";
 import type {DragStartEvent, DragEndEvent}from "@dnd-kit/core";
 import { useAppDispatch } from "../../../app/hooks";
@@ -15,7 +15,10 @@ export const useKanbanDnd = (tasks: Task[], statuses: TaskStatus[]) => {
     const [activeTask, setActiveTask] = useState<Task | null>(null);
 
     const sensors = useSensors(
-        useSensor(PointerSensor, { activationConstraint: { distance: 8 } })
+        useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+        useSensor(TouchSensor, {
+            activationConstraint: { delay: 250, tolerance: 5 }
+        })
     );
 
     const handleDragStart = (event: DragStartEvent) => {
@@ -58,7 +61,6 @@ export const useKanbanDnd = (tasks: Task[], statuses: TaskStatus[]) => {
         }
 
         if (task.statusId !== newStatusId) {
-            // ВИПРАВЛЕНО: Явно вказуємо тип для DTO, щоб TS не вимагав attachments
             const updateDto: Partial<UpdateTaskDto> = { statusId: newStatusId };
             dispatch(updateTask({ id: activeId, dto: updateDto as UpdateTaskDto }));
         }
