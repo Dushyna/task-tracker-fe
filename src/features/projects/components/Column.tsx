@@ -12,6 +12,8 @@ export function Column({ status,
                            onAddTask,
                            onDelete,
                            canDelete,
+                           dragAttributes,
+                           dragListeners,
 }: SortableColumnProps) {
     const { setNodeRef } = useDroppable({ id: status.id });
     const dispatch = useAppDispatch();
@@ -70,7 +72,10 @@ export function Column({ status,
 
     return (
         <div ref={setNodeRef} className="flex flex-col bg-transparent rounded-2xl border-2 border-cyan-400/20 text-cyan-400 p-4 min-w-[320px] min-h-[500px] transition-all hover:border-cyan-400/40">
-            <h2 className="text-lg font-semibold mb-3 flex justify-between items-center text-cyan-400">
+            <h2
+                {...dragAttributes}
+                {...dragListeners}
+                className="text-lg font-semibold mb-3 flex justify-between items-center text-cyan-400 touch-none select-none cursor-grab active:cursor-grabbing">
                 <div className="flex-1 mr-2 min-w-0">
                     {isEditing ? (
                         <input
@@ -109,7 +114,7 @@ export function Column({ status,
                         />
                     )}
                 </div>
-                <div className="flex gap-2 shrink-0">
+                <div className="flex gap-2 shrink-0" onClick={(e) => e.stopPropagation()}>
                     <MainButton onClick={onAddTask}>New Task</MainButton>
                     {canDelete && onDelete && (
                         <button

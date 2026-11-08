@@ -3,6 +3,8 @@ import type { ReactNode } from 'react';
 import { CSS } from "@dnd-kit/utilities";
 import { Column } from "./Column";
 import type { TaskStatus } from "../../statuses/types";
+import type { DraggableAttributes } from "@dnd-kit/core";
+import type { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
 
 export interface SortableColumnProps {
     status: TaskStatus;
@@ -11,16 +13,18 @@ export interface SortableColumnProps {
     onAddTask: () => void;
     onDelete?: () => void;
     canDelete?: boolean;
+    dragAttributes?: DraggableAttributes;
+    dragListeners?: SyntheticListenerMap;
 }
 
 export function SortableColumn(props: SortableColumnProps) {
     const {
-        attributes,
-        listeners,
         setNodeRef,
         transform,
         transition,
         isDragging,
+        attributes, // Извлекаем отсюда
+        listeners,  // Извлекаем отсюда
     } = useSortable({
         id: props.status.id,
         data: {
@@ -37,12 +41,14 @@ export function SortableColumn(props: SortableColumnProps) {
         <div
             ref={setNodeRef}
             style={style}
-            className={`${isDragging ? "opacity-30" : "opacity-100"} transition-opacity`}
+            className={`${isDragging ? "opacity-30" : "opacity-100"} transition-opacity h-full`}
         >
-            {/* listeners та attributes  */}
-            <div {...attributes} {...listeners}>
-                <Column {...props} />
-            </div>
+            {/* Убрали лишний div! Передаем слушатели напрямую в компонент Column */}
+            <Column
+                {...props}
+                dragAttributes={attributes}
+                dragListeners={listeners}
+            />
         </div>
     );
 }
