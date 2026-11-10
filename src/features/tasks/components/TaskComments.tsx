@@ -142,7 +142,7 @@ export const TaskComments: React.FC<TaskCommentsProps> = ({taskId}) => {
                                         <>
                                             <p className="text-sm text-white leading-relaxed pr-10">{comment.text}</p>
 
-                                            <div className="absolute top-2 right-2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
+                                            <div className="absolute top-2 right-2 flex items-center gap-1 md:opacity-0 md:group-hover:opacity-100 transition-all">
 
                                                 <button
                                                     onClick={() => {

@@ -72,13 +72,13 @@ export default function ProjectsList() {
     };
     console.log("projectToEdit:", projectToEdit);
     return (
-        <section className="flex-1 p-8 min-h-screen border border-cyan-900/50 rounded-2xl bg-transparent">
-            <div className="flex items-center justify-between mb-10">
-                <h2 className="text-cyan-300 text-3xl font-black uppercase tracking-[0.2em] text-glow">
+        <section className="flex-1 p-4 md:p-8 min-h-screen border border-cyan-900/50 rounded-2xl bg-transparent">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 md:mb-10">
+                <h2 className="text-cyan-300 text-2xl md:text-3xl font-black uppercase tracking-[0.2em] text-glow">
                     Projects
                 </h2>
 
-                <MainButton onClick={() => setShowForm(true)}>
+                <MainButton onClick={() => setShowForm(true)} className="w-full sm:w-auto text-center justify-center">
                     New Project
                 </MainButton>
             </div>
@@ -88,12 +88,12 @@ export default function ProjectsList() {
                 {projects?.map((project) => (
                     <div
                         key={project.id}
-                        className="group relative bg-black/40 border border-cyan-900/50 rounded-2xl p-6 transition-all duration-500 hover:border-cyan-400 hover:shadow-[0_0_30px_rgba(6,182,212,0.1)]"
+                        className="group relative bg-black/40 border border-cyan-900/50 rounded-2xl p-5 md:p-6 transition-all duration-500 hover:border-cyan-400 hover:shadow-[0_0_30px_rgba(6,182,212,0.1)] flex flex-col justify-between min-h-[160px]"
                     >
                         <Link to={`/project/${project.id}`} className="absolute inset-0 z-10"
                               aria-label={`Open ${project.title}`}/>
                         <div className="relative z-0 mb-6">
-                            <h3 className="text-cyan-400 text-xl font-black uppercase mb-2 group-hover:text-cyan-200 transition-colors line-clamp-2">
+                            <h3 className="text-cyan-400 text-lg md:text-xl font-black uppercase mb-2 group-hover:text-cyan-200 transition-colors line-clamp-2">
                                 {project.title}
                             </h3>
                             <p className="text-slate-500 text-sm line-clamp-2">
@@ -101,11 +101,11 @@ export default function ProjectsList() {
                             </p>
                         </div>
 
-                        <div className="flex justify-end gap-2">
+                        <div className="flex justify-end gap-3 relative z-20 mt-auto">
                             <NeonButton
                                 size="sm"
                                 variant="primary"
-                                className="relative z-20 opacity-0 group-hover:opacity-100"
+                                className="w-20 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300"
                                 onClick={() => openEdit(project)}
                             >
                                 Edit
@@ -114,7 +114,7 @@ export default function ProjectsList() {
                             <NeonButton
                                 size="sm"
                                 variant="primary"
-                                className="  relative z-20 opacity-0 group-hover:opacity-100 border-rose-500/50 text-rose-500"
+                                className="w-20 md:opacity-0 md:group-hover:opacity-100 border-rose-500/50 text-rose-500 hover:border-rose-400 transition-opacity duration-300"
                                 onClick={() => {
                                     openConfirm(project.id, project.title);
                                 }}
@@ -127,7 +127,7 @@ export default function ProjectsList() {
             </div>
 
             {showForm && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 bg-black/50">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 ">
                     <div className="w-full max-w-2xl px-4">
                         <ProjectForm onClose={() => setShowForm(false)} />
                     </div>

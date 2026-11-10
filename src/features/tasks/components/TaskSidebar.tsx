@@ -93,7 +93,7 @@ export const TaskSidebar = ({ task, projectMembers, projectMarkers, actions, isU
 
                         {/* MARKERS PICKER */}
                         {btn.id === 'labels' && showLabels && (
-                            <div className="w-[280px] bg-white border-2 border-cyan-400 rounded-3xl shadow-2xl p-4 z-[100] mt-2 relative md:absolute md:top-0 md:right-full md:mr-4 animate-in slide-in-from-right-4">
+                            <div className="w-full max-w-[280px] bg-white border-2 border-cyan-400 rounded-3xl shadow-2xl p-4 z-[100] mt-2 relative md:absolute md:top-0 md:right-full md:mr-4 animate-in slide-in-from-right-4">
                                 <div className="flex justify-between items-center mb-3">
                                     <span className="text-[11px] font-black text-slate-800 uppercase tracking-widest">Labels</span>
                                     <button onClick={() => setShowLabels(false)} className="text-slate-400">✕</button>
@@ -116,7 +116,8 @@ export const TaskSidebar = ({ task, projectMembers, projectMarkers, actions, isU
                                                         e.stopPropagation();
                                                         setMarkerToDelete(marker.id);
                                                     }}
-                                                    className="w-8 h-8 flex items-center justify-center rounded-lg bg-rose-50 text-rose-400 opacity-0 group-hover/marker:opacity-100 hover:bg-rose-500 hover:text-white transition-all border border-rose-100 shadow-sm"
+                                                    aria-label="Delete global label"
+                                                    className="w-8 h-8 flex items-center justify-center rounded-lg bg-rose-50 text-rose-400 md:opacity-0 md:group-hover/marker:opacity-100 hover:bg-rose-500 hover:text-white transition-all border border-rose-100 shadow-sm"
                                                 >
                                                     <span className="text-[10px]">🗑</span>
                                                 </button>
@@ -151,7 +152,7 @@ export const TaskSidebar = ({ task, projectMembers, projectMarkers, actions, isU
 
                         {/* MEMBERS PICKER */}
                         {btn.id === 'members' && showMembers && (
-                            <div onClick={e => e.stopPropagation()} className="w-[280px] bg-white border-2 border-cyan-400 rounded-3xl shadow-2xl p-4 z-[100] mt-2 relative md:absolute md:top-0 md:right-full md:mr-4 animate-in slide-in-from-right-4">
+                            <div onClick={e => e.stopPropagation()} className="w-full max-w-[280px] bg-white border-2 border-cyan-400 rounded-3xl shadow-2xl p-4 z-[100] mt-2 relative md:absolute md:top-0 md:right-full md:mr-4 animate-in slide-in-from-right-4">
                                 <div className="flex justify-between items-center mb-3">
                                     <span className="text-[11px] font-black text-slate-800 uppercase tracking-widest">Members</span>
                                     <button onClick={() => setShowMembers(false)} className="text-slate-400">✕</button>
@@ -186,7 +187,7 @@ export const TaskSidebar = ({ task, projectMembers, projectMarkers, actions, isU
                             />
                             <div
                                 onClick={e => e.stopPropagation()}
-                                className="w-[300px] bg-white border-2 border-cyan-500 rounded-3xl shadow-2xl p-5 z-[100] mt-2 relative md:absolute md:top-0 md:right-full md:mr-4 animate-in zoom-in-95"
+                                className="w-full max-w-[300px] bg-white border-2 border-cyan-500 rounded-3xl shadow-2xl p-5 z-[100] mt-2 relative md:absolute md:top-0 md:right-full md:mr-4 animate-in zoom-in-95"
                             >
                                 <button
                                     onClick={() => setShowDatePicker(false)}
