@@ -121,6 +121,7 @@ export function Column({ status,
                             onClick={onDelete}
                             disabled={isStatusLoading}
                             title="Delete column"
+                            aria-label="Delete column"
                             className={`p-2 rounded-lg transition-all flex items-center justify-center
             ${isStatusLoading ? 'text-rose-500 bg-rose-500/10' : 'text-slate-500 hover:text-rose-500 hover:bg-rose-500/10'}`}
                         >

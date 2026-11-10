@@ -63,44 +63,55 @@ export function EditTaskModal({card, onClose}: TaskEditModalProps) {
                 onClick={e => e.stopPropagation()}>
 
                 {/* 1. Cover */}
-                <div className="h-20 w-full shrink-0 relative bg-gradient-to-r from-slate-900 via-cyan-950 to-slate-900 overflow-hidden">
+                <div
+                    className="min-h-20 w-full shrink-0 relative bg-gradient-to-r from-slate-900 via-cyan-950 to-slate-900 overflow-hidden">
 
                     {/* Header */}
-                    <div className="absolute inset-0 flex items-center">
-                        <div className="w-full px-4 flex">
+                    <div className="min-h-20 w-full py-4 px-4 flex items-center justify-center">
+                        <div
+                            className="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-center sm:text-left">
                             {/* TaskNumber */}
-                            <span className="text-base whitespace-nowrap font-black text-cyan-500/40 bg-cyan-500/5 p-2 rounded-full border border-cyan-500/20 tracking-[0.3em] uppercase">
-                                Task #{currentTask.taskNumber}
-                            </span>
+                            <div className="flex justify-center sm:justify-start">
+            <span
+                className="text-xs whitespace-nowrap font-black text-cyan-400 bg-cyan-500/10 px-3 py-1.5 rounded-full border border-cyan-500/20 tracking-widest uppercase">
+                Task #{currentTask.taskNumber}
+            </span>
+                            </div>
+
+                            {/* Input Title */}
                             <input
                                 defaultValue={currentTask.title}
                                 onBlur={(e) => {
                                     const val = e.target.value.trim();
                                     if (val && val !== currentTask.title) patchTask({title: val});
                                 }}
-                                className="w-full bg-transparent text-xl font-black text-white text-neon-strong outline-none transition-all uppercase tracking-tighter text-center"
+                                className="w-full max-w-md bg-transparent text-lg sm:text-xl font-black text-white text-neon-strong outline-none transition-all uppercase tracking-tighter text-center"
                             />
-                            <div className="flex whitespace-nowrap items-center gap-4 justify-center text-base text-cyan-500/40 ">
-                                CURRENT STATUS:
+
+                            {/* Status display */}
+                            <div
+                                className="flex whitespace-nowrap items-center gap-2 justify-center text-xs font-black text-cyan-400 uppercase tracking-wider">
+                                <span>Status:</span>
                                 <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]"></span>
-                                <span className="text-cyan-400 text-base font-black uppercase tracking-[0.2em]">
-                                        {statusName}
-                                </span>
+                                <span className="text-cyan-400 font-black tracking-[0.1em]">
+                {statusName}
+            </span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <PulsedStripe height="2px"></PulsedStripe>
-                <div className="px-10 pt-12 pb-10 grid grid-cols-1 lg:grid-cols-[1fr_280px] overflow-y-auto gap-10">
-                    {/* Left part */}
+                <div className="px-4 py-6 sm:px-10 sm:pt-12 sm:pb-10 grid grid-cols-1 lg:grid-cols-[1fr_280px] overflow-y-auto gap-6 sm:gap-10">                    {/* Left part */}
                     <div className="space-y-8">
                         {/* Markers and Members */}
                         <div className="flex flex-wrap gap-10">
                             {error && (
                                 <div className="w-full mb-4 animate-in fade-in slide-in-from-top-2 duration-300">
-                                    <div className="bg-rose-500/10 border border-rose-500/50 rounded-xl px-4 py-2.5 flex items-center gap-3 shadow-[0_0_15px_rgba(244,63,94,0.2)]">
+                                    <div
+                                        className="bg-rose-500/10 border border-rose-500/50 rounded-xl px-4 py-2.5 flex items-center gap-3 shadow-[0_0_15px_rgba(244,63,94,0.2)]">
                                         <span className="text-rose-500 animate-pulse text-xs">⚠️</span>
-                                        <span className="text-[10px] font-black text-rose-400 uppercase tracking-[0.1em]">
+                                        <span
+                                            className="text-[10px] font-black text-rose-400 uppercase tracking-[0.1em]">
                                             System Alert // {error}
                                         </span>
                                     </div>
@@ -126,7 +137,7 @@ export function EditTaskModal({card, onClose}: TaskEditModalProps) {
                                     <div className="flex -space-x-2">
                                         {currentTask.executors.map(ex => (
                                             <div key={ex.id}
-                                                className="w-9 h-9 rounded-xl bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-cyan-400 text-xs font-black shadow-lg">
+                                                 className="w-9 h-9 rounded-xl bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-cyan-400 text-xs font-black shadow-lg">
                                                 {ex.email.charAt(0).toUpperCase()}
                                             </div>
                                         ))}
@@ -196,14 +207,15 @@ export function EditTaskModal({card, onClose}: TaskEditModalProps) {
                                 projectMarkers={project?.markers || []}
                                 actions={{
                                     handleAddExecutor, handleAddMarker,
-                                    handleCreateAndAddMarker,handleDeleteGlobalMarker, setIsCreatingChecklist,
+                                    handleCreateAndAddMarker, handleDeleteGlobalMarker, setIsCreatingChecklist,
                                     patchTask
                                 }}
                             />
                         </div>
 
                         {/* Activity Footer — Unified Style */}
-                        <div className="mt-4 p-5 bg-white/5 rounded-2xl border group transition-all border-cyan-500/20 shadow-inner">
+                        <div
+                            className="mt-4 p-5 bg-white/5 rounded-2xl border group transition-all border-cyan-500/20 shadow-inner">
                             <p className="text-[9px] text-cyan-400 font-black uppercase tracking-[0.2em] mb-4 px-1 border-b border-white/5 pb-2">
                                 HISTORY
                             </p>
@@ -213,27 +225,31 @@ export function EditTaskModal({card, onClose}: TaskEditModalProps) {
                                 <div className="flex justify-between items-center">
                                     <div className="flex items-center gap-2">
                                         <div className="w-1 h-1 rounded-full bg-cyan-500/20"></div>
-                                        <span className="text-[10px] font-black uppercase tracking-widest text-cyan-400">
+                                        <span
+                                            className="text-[10px] font-black uppercase tracking-widest text-cyan-400">
                                             Initialized
                                         </span>
                                     </div>
-                                    <span className="text-[10px] font-black uppercase tracking-tighter text-cyan-400/80">
+                                    <span
+                                        className="text-[10px] font-black uppercase tracking-tighter text-cyan-300">
                                         {currentTask.createdAt
-                                        ? format(new Date(currentTask.createdAt), 'MMM d, yyyy')
-                                        : '---'}
+                                            ? format(new Date(currentTask.createdAt), 'MMM d, yyyy')
+                                            : '---'}
                                     </span>
                                 </div>
                                 <div className="flex justify-between items-center">
                                     <div className="flex items-center gap-2">
-                                        <div className="w-1 h-1 rounded-full bg-cyan-500/40 shadow-[0_0_8px_rgba(6,182,212,0.4)]"></div>
-                                        <span className="text-[10px] font-black uppercase tracking-widest text-cyan-400">
+                                        <div
+                                            className="w-1 h-1 rounded-full bg-cyan-500/40 shadow-[0_0_8px_rgba(6,182,212,0.4)]"></div>
+                                        <span
+                                            className="text-[10px] font-black uppercase tracking-widest text-cyan-400">
                                             Last Update
                                         </span>
                                     </div>
                                     <span className="text-[10px] font-black uppercase tracking-tighter text-cyan-400">
                                         {currentTask.updatedAt
-                                        ? formatDistanceToNow(new Date(currentTask.updatedAt), {addSuffix: true})
-                                        : 'Just now'}
+                                            ? formatDistanceToNow(new Date(currentTask.updatedAt), {addSuffix: true})
+                                            : 'Just now'}
                                     </span>
                                 </div>
                             </div>

@@ -44,6 +44,7 @@ export default function Header() {
                      </Link>
                      <button
                          onClick={() => setIsMenuOpen(!isMenuOpen)}
+                         aria-label="Toggle navigation menu"
                          className="p-2 text-cyan-400 hover:text-white focus:outline-none md:hidden transition-colors"
                      >
                          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

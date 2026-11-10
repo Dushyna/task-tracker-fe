@@ -14,7 +14,7 @@ export default function MainButton({children, variant = "primary", width, classN
 
     const variantStyles = {
         primary:
-            "bg-cyan-500 border border-cyan-300/50 shadow-[0_0_20px_rgba(6,182,212,0.6)] hover:bg-cyan-400 hover:shadow-[0_0_35px_rgba(6,182,212,0.9)]",
+            "bg-cyan-700 border border-cyan-500/50 shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:bg-cyan-500 hover:shadow-[0_0_35px_rgba(6,182,212,0.8)]",
         danger:
             "bg-red-500 border border-red-300/50 shadow-[0_0_20px_rgba(239,68,68,0.6)] hover:bg-red-700 hover:shadow-[0_0_35px_rgba(239,68,68,0.9)]",
     };

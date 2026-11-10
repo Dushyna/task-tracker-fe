@@ -56,7 +56,7 @@ export const SortableTask = React.memo(function SortableTask({
             onClick={onOpenEdit}
             {...attributes}
             {...listeners}
-            className="group relative bg-white rounded-xl p-3 border-2 border-cyan-500 transition-shadow duration-200 cursor-grab active:cursor-grabbing animate-in zoom-in-95 shadow-sm hover:shadow-md touch-none select-none">
+            className="group relative bg-white rounded-xl p-3 border-2 border-cyan-600 transition-shadow duration-200 cursor-grab active:cursor-grabbing animate-in zoom-in-95 shadow-sm hover:shadow-md touch-none select-none">
             {task.markers && task.markers.length > 0 && (
                 <div className="flex flex-wrap gap-1 mb-2">
                     {task.markers.map(marker => (
@@ -70,7 +70,7 @@ export const SortableTask = React.memo(function SortableTask({
             )}
 
             <div className="flex flex-col gap-0.5 mb-1">
-                    <span className="text-[9px] font-black text-cyan-500/60 uppercase tracking-widest leading-none">
+                    <span className="text-[9px] font-black text-cyan-700 uppercase tracking-widest leading-none">
         Task #{task.taskNumber}
     </span>
 
@@ -113,14 +113,12 @@ export const SortableTask = React.memo(function SortableTask({
                 )}
             </div>
 
-
-            {/* Кнопка удаления в стиле Trello (появляется при hover) */}
             <button
                 onClick={handleDelete}
-                disabled={isLoading} // Блокуємо кнопку під час будь-якої операції
+                disabled={isLoading}
                 title="Delete task"
                 className={`absolute top-2 right-2 p-1.5 rounded-md transition-all 
-        ${isLoading ? "opacity-100 bg-slate-100" : "opacity-0 group-hover:opacity-100 text-slate-400 hover:text-red-600 hover:bg-red-50"}`}
+        ${isLoading ? "opacity-100 bg-slate-100" : "md:opacity-0 md:group-hover:opacity-100 text-slate-400 hover:text-red-600 hover:bg-red-50"}`}
             >
                 {isLoading ? (
                     <svg className="animate-spin h-4 w-4 text-cyan-500" xmlns="http://www.w3.org" fill="none"

@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, type ChangeEvent } from "react";
 
 interface CardModalProps {
   card: { id: string; title: string; description: string };
@@ -90,7 +90,7 @@ export default function CardModal({ card, onClose }: CardModalProps) {
     }
   };
 
-  const handleAttachFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAttachFile = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setAttachments(prev => [...prev, { name: file.name, date: "Added today", type: file.name.split('.').pop()?.toUpperCase() || "FILE" }]);
@@ -127,7 +127,7 @@ export default function CardModal({ card, onClose }: CardModalProps) {
 
   return (
     <div className="fixed inset-0 bg-[#0f172a]/80 backdrop-blur-md z-50 flex items-start justify-center p-4 overflow-y-auto" onClick={onClose}>
-      <div className="bg-[#f1f2f4] rounded-[40px] shadow-2xl w-full max-w-5xl my-8 relative flex flex-col h-auto min-h-fit" onClick={(e) => e.stopPropagation()}>
+      <div className="bg-[#f1f2f4] rounded-[24px]sm:rounded-[40px] shadow-2xl w-full max-w-5xl my-2 sm:my-8 relative flex flex-col h-auto min-h-fit" onClick={(e) => e.stopPropagation()}>
         
         <input type="file" ref={coverFileRef} className="hidden" accept="image/*" onChange={(e) => { const file = e.target.files?.[0]; if (file) { setCoverImage(URL.createObjectURL(file)); setShowCoverPicker(false); } }} />
         <input type="file" ref={avatarFileRef} className="hidden" accept="image/*" onChange={(e) => { const file = e.target.files?.[0]; if (file) setUserAvatar(URL.createObjectURL(file)); }} />
@@ -137,15 +137,15 @@ export default function CardModal({ card, onClose }: CardModalProps) {
         <div className={`h-48 w-full shrink-0 relative transition-all duration-500 ${!coverImage ? coverColor : ''} rounded-t-[40px] shadow-inner`}
           style={{ backgroundImage: coverImage ? `url(${coverImage})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center' }}>
           <button onClick={onClose} className="absolute top-6 right-6 bg-black/20 hover:bg-black/40 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold z-10 transition-all">✕</button>
-          <div className="absolute -bottom-10 left-10 group">
-            <div className="w-24 h-24 rounded-full border-[6px] border-[#f1f2f4] shadow-xl overflow-hidden bg-white relative">
+          <div className="absolute -bottom-8 left-4 sm:-bottom-10 sm:left-10 group">
+            <div className="w-18 h-18 sm:w-24 sm:h-24 rounded-full border-[4px] sm:border-[6px] border-[#f1f2f4] shadow-xl overflow-hidden bg-white relative">
               {userAvatar ? <img src={userAvatar} className="w-full h-full object-cover" alt="avatar" /> : <div className="w-full h-full flex items-center justify-center text-slate-300 text-3xl">👤</div>}
-              <button onClick={() => avatarFileRef.current?.click()} className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-[10px] font-black uppercase tracking-tighter transition-all">Change</button>
+              <button onClick={() => avatarFileRef.current?.click()} className="absolute inset-0 bg-black/50 md:opacity-0 md:group-hover:opacity-100 flex items-center justify-center text-white text-[10px] font-black uppercase tracking-tighter transition-all">Change</button>
             </div>
           </div>
         </div>
 
-        <div className="pt-14 px-10 pb-10 grid grid-cols-1 md:grid-cols-12 gap-10 text-left overflow-visible h-auto">
+        <div className="pt-10 px-4 pb-6 sm:pt-14 sm:px-10 sm:pb-10 grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 text-left overflow-visible h-auto">
           <div className="md:col-span-8 space-y-8 overflow-visible h-auto">
             <h2 className="text-3xl font-black text-slate-800 uppercase tracking-tighter leading-none">{card.title}</h2>
             <div className="flex flex-wrap gap-6 items-start">
@@ -165,7 +165,7 @@ export default function CardModal({ card, onClose }: CardModalProps) {
                 <div className="space-y-2 cursor-pointer group" onClick={() => setShowDatePicker(true)}>
                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Due Date</p>
                   <div className="flex flex-col gap-1 bg-white border-2 border-cyan-500/10 px-4 py-2 rounded-xl shadow-sm group-hover:border-cyan-500 transition-all">
-                    <span className="text-cyan-600 text-[10px] font-black uppercase font-bold">📅 {selectedFullDate.range} at {selectedFullDate.time}</span>
+                    <span className="text-cyan-600 text-[10px] font-black uppercase ">📅 {selectedFullDate.range} at {selectedFullDate.time}</span>
                   </div>
                 </div>
               )}
@@ -240,7 +240,7 @@ export default function CardModal({ card, onClose }: CardModalProps) {
             </div>
 
             <div className="flex gap-3 pt-6 border-t border-slate-200">
-              <button onClick={onClose} className="bg-cyan-500 hover:bg-cyan-400 text-white text-[11px] font-black px-12 py-4 rounded-[22px] border-b-4 border-cyan-700 active:border-b-0 uppercase shadow-xl shadow-cyan-500/30">Save changes</button>
+              <button onClick={onClose} className="w-full sm:w-auto bg-cyan-500 hover:bg-cyan-400 text-white text-[11px] font-black px-12 py-4 rounded-[22px] border-b-4 border-cyan-700 active:border-b-0 uppercase shadow-xl shadow-cyan-500/30 text-center justify-center">Save changes</button>
             </div>
           </div>
 
@@ -254,7 +254,7 @@ export default function CardModal({ card, onClose }: CardModalProps) {
                   </button>
 
                   {btn.id === 'attachment' && showAttachmentPicker && (
-                    <div className="w-[300px] bg-white border-2 border-cyan-400 rounded-3xl shadow-2xl p-6 z-[100] mt-2 relative md:absolute md:top-0 md:right-full md:mr-4 animate-in slide-in-from-right-4">
+                    <div className="w-full max-w-[300px] bg-white border-2 border-cyan-400 rounded-3xl shadow-2xl p-4 sm:p-6 z-[100] mt-2 relative md:absolute md:top-0 md:right-full md:mr-4 animate-in slide-in-from-right-4">
                         <div className="flex justify-between items-center mb-4"><span className="text-[11px] font-black text-slate-800 uppercase tracking-widest">Attach from...</span><button onClick={() => setShowAttachmentPicker(false)} className="text-slate-400">✕</button></div>
                         <button onClick={() => attachFileRef.current?.click()} className="w-full bg-[#f1f2f4] hover:bg-cyan-50 text-slate-600 text-[10px] font-black py-4 rounded-2xl mb-4 border-2 border-dashed border-slate-300 hover:border-cyan-400 transition-all uppercase">Computer</button>
                         <div className="space-y-4 text-left border-t border-slate-100 pt-4">
@@ -275,7 +275,7 @@ export default function CardModal({ card, onClose }: CardModalProps) {
                   )}
 
                   {btn.id === 'dates' && showDatePicker && (
-                    <div className="w-[300px] bg-white border-2 border-cyan-500 rounded-3xl shadow-2xl p-5 z-[100] mt-2 relative md:absolute md:top-0 md:right-full md:mr-4 animate-in zoom-in-95">
+                    <div className="w-full max-w-[300px] bg-white border-2 border-cyan-500 rounded-3xl shadow-2xl p-4 sm:p-5 z-[100] mt-2 relative md:absolute md:top-0 md:right-full md:mr-4 animate-in zoom-in-95">
                         <p className="text-[10px] font-black text-cyan-600 uppercase mb-4 text-center tracking-widest">Set Dates</p>
                         <div className="bg-[#f1f2f4] rounded-xl p-3 mb-5 shadow-inner text-center h-auto">
                             <div className="flex justify-between items-center text-slate-700 mb-3 text-[10px] font-black uppercase px-2"><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span></div>
@@ -328,7 +328,7 @@ export default function CardModal({ card, onClose }: CardModalProps) {
                   )}
 
                   {btn.id === 'cover' && showCoverPicker && (
-                    <div className="w-[260px] bg-white border-2 border-cyan-400 rounded-3xl shadow-2xl p-5 z-[100] mt-1 relative md:absolute md:top-0 md:right-full md:mr-4 animate-in slide-in-from-right-4">
+                    <div className="w-full max-w-[260px] bg-white border-2 border-cyan-400 rounded-3xl shadow-2xl p-4 sm:p-5 z-[100] mt-1 relative md:absolute md:top-0 md:right-full md:mr-4 animate-in slide-in-from-right-4">
                       <p className="text-[10px] font-black text-slate-400 uppercase mb-4 text-center tracking-widest">Style Cover</p>
                       <div className="grid grid-cols-4 gap-2 mb-5 h-auto">{coverOptions.map((opt, i) => <button key={i} onClick={() => { setCoverColor(opt.color); setCoverImage(null); setShowCoverPicker(false); }} className={`h-10 rounded-xl ${opt.color} hover:scale-110 transition-transform border-2 ${coverColor === opt.color && !coverImage ? 'border-slate-800 shadow-md scale-105' : 'border-transparent'}`} />)}</div>
                       <button onClick={() => coverFileRef.current?.click()} className="w-full py-4 border-2 border-dashed border-slate-200 rounded-[20px] text-[9px] font-black uppercase text-slate-400 hover:border-cyan-500 hover:text-cyan-600 transition-all">+ Upload Photo</button>
