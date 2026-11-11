@@ -18,7 +18,7 @@ function App() {
     const isHomePage = location.pathname === "/";
 
     return (
-        <div className="relative min-h-screen bg-[#020617] overflow-hidden">
+        <div className="relative min-h-screen bg-[#020617] overflow-x-clip">
             <div className="fixed inset-0 bg-[url(/background.png)] bg-cover bg-center bg-fixed opacity-50"></div>
 
             {isHomePage && (<AnimatedStripes/>)}
