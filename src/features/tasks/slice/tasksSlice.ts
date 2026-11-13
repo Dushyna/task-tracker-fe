@@ -1,17 +1,61 @@
 import {createAppSlice} from "../../../app/createAppSlice";
-import type {CreateTaskDto, TaskDto, TasksSliceState, UpdateTaskPayload} from "../types";
+import type {
+    CreateTaskDto,
+    InFlightTaskUpdate,
+    Task,
+    TaskDto,
+    TasksSliceState,
+    UpdateTaskDto,
+    UpdateTaskPayload
+} from "../types";
 import * as api from "../services/api";
 import {isAxiosError, type AxiosError} from "axios";
 import {mapTaskFromApi} from "../mapper/mapper.ts";
-import type {PayloadAction} from "@reduxjs/toolkit";
+import {current, isDraft, type PayloadAction} from "@reduxjs/toolkit";
 
 const initialState: TasksSliceState = {
     tasks: [],
+    taskSnapshots: {},
+    inFlightTaskUpdates: {},
     comments: [],
     isLoading: false,
     searchQuery: "",
     selectedMarkerId: null as string | null,
 };
+
+function cloneTask(task: Task): Task {
+    const plain = isDraft(task) ? current(task) : task;
+    return structuredClone(plain);
+}
+
+function applyOptimisticUpdate(task: Task, dto: UpdateTaskDto): void {
+    if (dto.statusId) task.statusId = dto.statusId;
+    if (dto.title !== undefined) task.title = dto.title;
+    if (dto.description !== undefined) task.description = dto.description;
+    if (dto.dueDate !== undefined) task.dueDate = dto.dueDate;
+    if (dto.executorIds) {
+        task.executors = task.executors.filter(ex => dto.executorIds?.includes(ex.id));
+    }
+    if (dto.markerIds) {
+        task.markers = task.markers.filter(m => dto.markerIds?.includes(m.id));
+    }
+    if (dto.checklist) task.checklist = structuredClone(dto.checklist);
+}
+
+function rebaseInFlightUpdates(
+    base: Task,
+    updates: InFlightTaskUpdate[],
+    snapshots: Record<string, Task>,
+): Task {
+    let cursor = cloneTask(base);
+    for (const update of updates) {
+        snapshots[update.requestId] = cloneTask(cursor);
+        const next = cloneTask(cursor);
+        applyOptimisticUpdate(next, update.dto);
+        cursor = next;
+    }
+    return cursor;
+}
 
 export const tasksSlice = createAppSlice({
         name: "tasks",
@@ -31,7 +75,8 @@ export const tasksSlice = createAppSlice({
                     },
                     fulfilled: (state, action) => {
                         state.isLoading = false;
-                        state.tasks = (action.payload as TaskDto[]).map(mapTaskFromApi);                    },
+                        state.tasks = (action.payload as TaskDto[]).map(mapTaskFromApi);
+                    },
                     rejected: (state, action) => {
                         state.isLoading = false;
                         state.tasks = [];
@@ -49,6 +94,7 @@ export const tasksSlice = createAppSlice({
                                 err.response?.data?.message || "Internal Server Error"
                             );
                         }
+                        throw err;
                     });
                     // The value we return becomes the `fulfilled` action payload
                 },
@@ -71,53 +117,106 @@ export const tasksSlice = createAppSlice({
 
 
             updateTask: create.asyncThunk(
-                async ({id, dto}:UpdateTaskPayload) => {
+                async ({id, dto}: UpdateTaskPayload) => {
                     return api.fetchUpdateTask(id, dto).catch((err) => {
                         if (isAxiosError(err)) {
                             throw new Error(
                                 err.response?.data?.message || "Internal Server Error"
                             );
                         }
+                        throw err;
                     });
                     // The value we return becomes the `fulfilled` action payload
                 },
                 {
                     pending: (state, action) => {
                         state.isLoading = true;
-                        const { id, dto } = action.meta.arg;
+                        const {id, dto} = action.meta.arg;
+                        const requestId = action.meta.requestId;
 
                         const task = state.tasks.find((t) => t.id === id);
-                        if (task) {
-                            if (dto.statusId) task.statusId = dto.statusId;
-                            if (dto.title) task.title = dto.title;
-                            if (dto.description) task.description = dto.description;
-                            if (dto.dueDate !== undefined) task.dueDate = dto.dueDate;
-                            if (dto.executorIds) {
-                                task.executors = task.executors.filter(ex => dto.executorIds?.includes(ex.id));
-                            }
-                            if (dto.markerIds) {
-                                task.markers = task.markers.filter(m => dto.markerIds?.includes(m.id));
-                            }
-                            if (dto.checklist) task.checklist = dto.checklist;
-                        }
+                        if (!task) return;
+
+                        state.taskSnapshots[requestId] = cloneTask(task);
+                        const queue = state.inFlightTaskUpdates[id] ?? [];
+                        queue.push({requestId, dto});
+                        state.inFlightTaskUpdates[id] = queue;
+                        applyOptimisticUpdate(task, dto);
                     },
                     fulfilled: (state, action) => {
                         state.isLoading = false;
-                        const updatedTaskDto = action.payload;
-                        const updatedTask = mapTaskFromApi(updatedTaskDto);
+                        const {id} = action.meta.arg;
+                        const requestId = action.meta.requestId;
+                        delete state.taskSnapshots[requestId];
 
-                        const index = state.tasks.findIndex(
-                            (t) => t.id === updatedTask.id
-                        );
+                        const remaining = (state.inFlightTaskUpdates[id] ?? [])
+                            .filter((update) => update.requestId !== requestId);
+                        const updatedTask = mapTaskFromApi(action.payload);
+                        const index = state.tasks.findIndex((t) => t.id === updatedTask.id);
 
-                        if (index !== -1) {
-                            state.tasks[index] = updatedTask;
+                        if (remaining.length === 0 || index === -1) {
+                            for (const update of remaining) {
+                                delete state.taskSnapshots[update.requestId];
+                            }
+                            delete state.inFlightTaskUpdates[id];
+                            if (index !== -1) {
+                                state.tasks[index] = updatedTask;
+                            }
+                        } else {
+                            state.inFlightTaskUpdates[id] = remaining;
+                            state.tasks[index] = rebaseInFlightUpdates(
+                                updatedTask,
+                                remaining,
+                                state.taskSnapshots,
+                            );
                         }
 
                         state.createTaskErrorMessage = "";
                     },
                     rejected: (state, action) => {
                         state.isLoading = false;
+                        const {id} = action.meta.arg;
+                        const requestId = action.meta.requestId;
+                        const queue = state.inFlightTaskUpdates[id] ?? [];
+                        const failedIndex = queue.findIndex((update) => update.requestId === requestId);
+                        const snapshot = state.taskSnapshots[requestId];
+
+                        delete state.taskSnapshots[requestId];
+
+                        const taskIndex = state.tasks.findIndex((t) => t.id === id);
+
+                        if (snapshot && failedIndex !== -1) {
+                            const earlier = queue.slice(0, failedIndex);
+                            const later = queue.slice(failedIndex + 1);
+
+                            if (taskIndex !== -1) {
+                                state.tasks[taskIndex] = later.length === 0
+                                    ? cloneTask(snapshot)
+                                    : rebaseInFlightUpdates(snapshot, later, state.taskSnapshots);
+                            } else {
+                                for (const update of later) {
+                                    delete state.taskSnapshots[update.requestId];
+                                }
+                            }
+
+                            const stillInFlight = [...earlier, ...later];
+                            if (stillInFlight.length === 0 || taskIndex === -1) {
+                                delete state.inFlightTaskUpdates[id];
+                            } else {
+                                state.inFlightTaskUpdates[id] = stillInFlight;
+                            }
+                        } else {
+                            const remaining = queue.filter((update) => update.requestId !== requestId);
+                            if (remaining.length === 0 || taskIndex === -1) {
+                                for (const update of remaining) {
+                                    delete state.taskSnapshots[update.requestId];
+                                }
+                                delete state.inFlightTaskUpdates[id];
+                            } else {
+                                state.inFlightTaskUpdates[id] = remaining;
+                            }
+                        }
+
                         state.createTaskErrorMessage = action.error.message;
                     },
                 }
@@ -129,17 +228,21 @@ export const tasksSlice = createAppSlice({
                     return id;
                 },
                 {
-                    pending: (state) => { state.isLoading = true; },
+                    pending: (state) => {
+                        state.isLoading = true;
+                    },
                     fulfilled: (state, action) => {
                         state.isLoading = false;
                         state.tasks = state.tasks.filter(t => t.id !== action.payload);
                     },
-                    rejected: (state) => { state.isLoading = false; }
+                    rejected: (state) => {
+                        state.isLoading = false;
+                    }
                 }
             ),
 
             uploadTaskAttachment: create.asyncThunk(
-                async ({ taskId, file }: { taskId: string; file: File }) => {
+                async ({taskId, file}: { taskId: string; file: File }) => {
                     return await api.uploadAttachment(taskId, file);
                 },
                 {
@@ -166,13 +269,13 @@ export const tasksSlice = createAppSlice({
             ),
 
             deleteTaskAttachment: create.asyncThunk(
-                async ({ taskId, attachmentId }: { taskId: string; attachmentId: string }) => {
+                async ({taskId, attachmentId}: { taskId: string; attachmentId: string }) => {
                     await api.deleteAttachment(taskId, attachmentId);
-                    return { taskId, attachmentId };
+                    return {taskId, attachmentId};
                 },
                 {
                     fulfilled: (state, action) => {
-                        const { taskId, attachmentId } = action.payload;
+                        const {taskId, attachmentId} = action.payload;
                         const task = state.tasks.find(t => t.id === taskId);
                         if (task) {
                             task.attachments = task.attachments.filter(a => a.id !== attachmentId);
@@ -208,7 +311,7 @@ export const tasksSlice = createAppSlice({
             ),
 
             addComment: create.asyncThunk(
-                async ({ taskId, text }: { taskId: string, text: string }) => {
+                async ({taskId, text}: { taskId: string, text: string }) => {
                     return api.fetchAddComment(taskId, text).catch((err) => {
                         if (isAxiosError(err)) {
                             throw new Error(err.response?.data?.message || "Failed to add comment");
@@ -227,7 +330,7 @@ export const tasksSlice = createAppSlice({
             ),
 
             deleteComment: create.asyncThunk(
-                async ({ taskId, commentId }: { taskId: string, commentId: string }) => {
+                async ({taskId, commentId}: { taskId: string, commentId: string }) => {
                     try {
                         await api.fetchDeleteComment(taskId, commentId);
                         return commentId;
@@ -236,21 +339,25 @@ export const tasksSlice = createAppSlice({
                             throw new Error(err.response?.data?.message || "Failed to delete");
                         }
                         throw err;
-                    }                },
+                    }
+                },
                 {
-                    pending: (state) => { state.isLoading = true; },
+                    pending: (state) => {
+                        state.isLoading = true;
+                    },
                     fulfilled: (state, action) => {
                         state.isLoading = false;
                         state.comments = state.comments.filter(c => c.id !== action.payload);
                     },
                     rejected: (state, action) => {
                         state.isLoading = false;
-                        state.createTaskErrorMessage = action.error.message;                    }
+                        state.createTaskErrorMessage = action.error.message;
+                    }
                 }
             ),
 
             updateComment: create.asyncThunk(
-                async ({ taskId, commentId, text }: { taskId: string, commentId: string, text: string }) => {
+                async ({taskId, commentId, text}: { taskId: string, commentId: string, text: string }) => {
                     try {
                         return await api.fetchUpdateComment(taskId, commentId, text);
                     } catch (err) {
@@ -258,7 +365,8 @@ export const tasksSlice = createAppSlice({
                             throw new Error(err.response?.data?.message || "Forbidden");
                         }
                         throw err;
-                    }                },
+                    }
+                },
                 {
                     pending: (state) => {
                         state.isLoading = true;
@@ -338,8 +446,23 @@ export const tasksSlice = createAppSlice({
 );
 
 // // Action creators are generated for each case reducer function.
-export const {createTask,setSearchQuery,setSelectedMarkerId, removeMarkerFromAllTasks, getTasksByProjectId, updateTask, deleteTask,
-    clearTaskError, setTaskError, uploadTaskAttachment, deleteTaskAttachment, getComments, addComment, deleteComment, updateComment}
+export const {
+    createTask,
+    setSearchQuery,
+    setSelectedMarkerId,
+    removeMarkerFromAllTasks,
+    getTasksByProjectId,
+    updateTask,
+    deleteTask,
+    clearTaskError,
+    setTaskError,
+    uploadTaskAttachment,
+    deleteTaskAttachment,
+    getComments,
+    addComment,
+    deleteComment,
+    updateComment
+}
     = tasksSlice.actions;
 
 // Selectors returned by `slice.selectors` take the root state as their first argument.
