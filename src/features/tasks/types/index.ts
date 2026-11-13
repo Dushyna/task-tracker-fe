@@ -61,9 +61,15 @@ export interface UpdateTaskPayload {
     dto: UpdateTaskDto;
 }
 
+export interface InFlightTaskUpdate {
+    requestId: string;
+    dto: UpdateTaskDto;
+}
 
 export interface TasksSliceState {
     tasks: Task[];
+    taskSnapshots: Record<string, Task>;
+    inFlightTaskUpdates: Record<string, InFlightTaskUpdate[]>;
     createTaskErrorMessage?: string;
     comments: Comment[];
     isLoading: boolean;

@@ -1,33 +1,29 @@
-import type { Action, ThunkAction } from "@reduxjs/toolkit";
-import { combineSlices, configureStore } from "@reduxjs/toolkit";
-import { setupListeners } from "@reduxjs/toolkit/query";
-import { authSlice } from "../features/auth/slice/authSlice";
-import { projectsSlice } from "../features/projects/slice/projectsSlice";
-import { tasksSlice} from "../features/tasks/slice/tasksSlice.ts";
-import { taskStatusSlice} from "../features/statuses/slice/taskStatusSlice.ts";
+import {combineSlices, configureStore} from "@reduxjs/toolkit";
+import {authSlice} from "../features/auth/slice/authSlice";
+import {projectsSlice} from "../features/projects/slice/projectsSlice";
+import {tasksSlice} from "../features/tasks/slice/tasksSlice.ts";
+import {taskStatusSlice} from "../features/statuses/slice/taskStatusSlice.ts";
 import {userSlice} from "../features/user/slice/userSlice.ts";
 // `combineSlices` automatically combines the reducers using
 // their `reducerPath`s, therefore we no longer need to call `combineReducers`.
-export const rootReducer = combineSlices(authSlice, userSlice, projectsSlice, tasksSlice,taskStatusSlice);
+export const rootReducer = combineSlices(authSlice, userSlice, projectsSlice, tasksSlice, taskStatusSlice);
 // Infer the `RootState` type from the root reducer
 export type RootState = ReturnType<typeof rootReducer>;
 
 // The store setup is wrapped in `makeStore` to allow reuse
 // when setting up tests that need the same store config
 export const makeStore = (preloadedState?: Partial<RootState>) => {
-  const store = configureStore({
-    reducer: rootReducer,
+    return configureStore({
+        reducer: rootReducer,
 
-    preloadedState,
-      middleware: (getDefaultMiddleware) =>
-          getDefaultMiddleware({
-              serializableCheck: false,
-              immutableCheck: false,
-          }),  });
-  // configure listeners using the provided defaults
-  // optional, but required for `refetchOnFocus`/`refetchOnReconnect` behaviors
-  setupListeners(store.dispatch);
-  return store;
+        preloadedState,
+        middleware: (getDefaultMiddleware) =>
+            getDefaultMiddleware({
+                serializableCheck: false,
+                immutableCheck: false,
+            }),
+    });
+
 };
 
 export const store = makeStore();
@@ -36,9 +32,4 @@ export const store = makeStore();
 export type AppStore = typeof store;
 // Infer the `AppDispatch` type from the store itself
 export type AppDispatch = AppStore["dispatch"];
-export type AppThunk<ThunkReturnType = void> = ThunkAction<
-  ThunkReturnType,
-  RootState,
-  unknown,
-  Action
->;
+
