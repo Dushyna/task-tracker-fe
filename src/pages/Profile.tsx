@@ -222,6 +222,7 @@ export default function Profile() {
                             <img
                                 src={avatarPreview || `${avatarUrl}`}
                                 alt="User_Avatar"
+                                onError={() => setAvatarUrl(null)}
                                 className="w-full h-full object-cover"
                             />
                         ) : (
