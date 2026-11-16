@@ -41,3 +41,22 @@ jobs:
 
       - name: Build project
         run: npm run build
+  deploy:
+    name: Deploy Frontend to Ionos VPS
+    needs: check
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd /root/task-tracker/frontend
+            git checkout develop
+            git pull origin develop
+            cd /root/task-tracker
+            docker compose up -d --build frontend

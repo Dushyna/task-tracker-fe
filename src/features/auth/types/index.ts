@@ -12,12 +12,6 @@ export interface UserRegistrationDto {
 export type ROLE = "ROLE_USER" | "ROLE_ADMIN";
 export type CONFIRM_STATUS = "CONFIRMED" | "UNCONFIRMED" | "BANNED";
 
-export interface User {
-  id?: string;
-  email: string;
-  role: ROLE;
-}
-
 export interface AuthSliceState {
   isAuthenticated: boolean;
   isInitialized: boolean;
