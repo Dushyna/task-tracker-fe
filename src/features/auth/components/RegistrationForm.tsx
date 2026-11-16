@@ -49,7 +49,12 @@ const RegistrationForm = () => {
 
     const handleSubmit = async (values: typeof initialValues) => {
         try {
-            await dispatch(register(values)).unwrap();
+            await dispatch(
+                register({
+                    email: values.email,
+                    password: values.password,
+                })
+            ).unwrap();
 
             navigate("/login");
         } catch (error) {

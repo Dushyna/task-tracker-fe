@@ -24,11 +24,13 @@ export const authSlice = createAppSlice({
                             err.response?.data?.message || "Internal Server Error"
                         );
                     }
+                    throw err;
                 });
             },
             {
                 pending: (state) => {
                     state.isAuthenticated = false;
+                    state.loginErrorMessage = undefined;
                 },
                 fulfilled: (state) => {
                     state.isAuthenticated = true;
@@ -77,10 +79,12 @@ export const authSlice = createAppSlice({
             {
                 pending: (state) => {
                     state.isAuthenticated = false;
+                    state.registerErrorMessage = undefined;
                 },
-                fulfilled: (state, action) => {
-                    state.isAuthenticated = true;
-                    state.user = action.payload;
+                fulfilled: (state) => {
+                    state.isAuthenticated = false;
+                    state.user = undefined;
+                    state.registerErrorMessage = undefined;
                 },
                 rejected: (state, action) => {
                     state.isAuthenticated = false;
@@ -110,7 +114,7 @@ export const authSlice = createAppSlice({
         ),
 
         setUser: create.reducer((state, action: PayloadAction<UserResponseDto | undefined>) => {
-            state.user = action.payload ? {...action.payload} : undefined;
+            state.user = action.payload;
         })
 
     }),

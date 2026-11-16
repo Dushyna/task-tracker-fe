@@ -1,78 +1,132 @@
 ## 🚀 React + TypeScript + Vite
 
-Перед началом не забудьте выполнить установку зависимостей:
+Vergiss nicht, vor dem Start die Abhängigkeiten zu installieren:
 
 ```bash
 npm install
 ```
 
-### 🎨 Стилизация с Tailwind CSS
+---
 
-Проект уже настроен с использованием **Tailwind CSS**.
-Рекомендуем потратить немного времени на изучение его синтаксиса, чтобы легко и эффективно стилизовать интерфейс.
+### 🎨 Styling mit Tailwind CSS
 
-* Документация: [https://tailwindcss.com/docs](https://tailwindcss.com/docs)
+Das Projekt ist bereits für die Verwendung von **Tailwind CSS** vorkonfiguriert.
+Es empfiehlt sich, etwas Zeit in das Kennenlernen der Syntax zu investieren, um die Benutzeroberfläche einfach und effizient zu gestalten.
+
+* Dokumentation: [https://tailwindcss.com](https://tailwindcss.com)
 
 ---
 
-### 📡 Работа с API через Axios
+### 🧠 State Management mit Redux Toolkit
 
-Для отправки запросов используется **Axios**.
-Глобальная конфигурация уже настроена и находится в папке:
+Für die globale Zustandsverwaltung wird **Redux Toolkit (RTK)** eingesetzt. Die zentrale Konfiguration befindet sich im Ordner `/src/app` und nutzt moderne RTK-Patterns:
+
+* **Store-Setup (`/src/app/store.ts`)**: Neue Slices werden direkt über `combineSlices` zusammengeführt – ein manuelles Registrieren in `combineReducers` ist nicht erforderlich. Die `makeStore`-Factory erleichtert die Wiederverwendung der Store-Konfiguration (z. B. für Tests mit `preloadedState`).
+* **`createAppSlice` (`/src/app/createAppSlice.ts`)**: Ermöglicht das Definieren von asynchronen Thunks (`asyncThunkCreator`) direkt innerhalb der Slices.
+* **Typisierte Hooks (`/src/app/hooks.ts`)**: Im gesamten Projekt werden für den Zugriff auf den Store ausschließlich die vordefinierten Hooks `useAppDispatch` und `useAppSelector` verwendet.
+
+---
+
+### 📡 API-Anfragen mit Axios
+
+Für das Senden von HTTP-Anfragen wird **Axios** verwendet.
+Die globale Konfiguration ist bereits eingerichtet und befindet sich unter:
 
 ```
 /src/lib/axiosInstance.ts
 ```
 
-✅ Поддержка cookie-based аутентификации .
+✅ Unterstützung für Cookie-basierte Authentifizierung.
 
 ---
 
-### ⚠️ Обработка ошибок
+### ⚠️ Fehlerbehandlung
 
-Пример обработки серверных ошибок можно найти в **authSlice** (`/features/auth/authSlice.ts`).
-
----
-
-### ✅ Редирект после успешных запросов
-
-Форма регистрации демонстрирует, как выполнять **редирект** после успешного действия:
-
+Ein Beispiel für die Behandlung von Serverfehlern und Axios-Exceptions befindet sich im **authSlice** (`/src/features/auth/slice/authSlice.ts`).
 
 ---
 
-### 🗂️ Структура проекта
+### ✅ Weiterleitung (Redirect) nach erfolgreichen Anfragen
+
+Das Registrierungsformular (`RegistrationForm.tsx`) zeigt beispielhaft, wie eine **Weiterleitung** nach einer erfolgreichen Aktion mithilfe von `.unwrap()` umgesetzt wird:
+
+```ts
+const handleSubmit = async (values: typeof initialValues) => {
+    try {
+        await dispatch(
+            register({
+                email: values.email,
+                password: values.password,
+            })
+        ).unwrap();
+
+        navigate("/login");
+    } catch (error) {
+        console.error("Registration failed:", error);
+    }
+};
+```
+
+---
+
+### 🗂️ Projektstruktur
+
+#### 📁 `/app`
+
+Enthält die **Redux-Store-Konfiguration** (`store.ts`, `createAppSlice.ts`), typisierte RTK-Hooks (`hooks.ts`) sowie globale Custom Hooks (`customHooks/`).
+
+#### 📁 `/assets`
+
+Enthält statische Ressourcen wie Bilder, Icons und Schriftarten.
+
+#### 📁 `/layouts`
+
+Beinhaltet übergeordnete **Layout-Komponenten** (z. B. `Layout.tsx`), die den gemeinsamen Rahmen für verschiedene Seiten bilden.
 
 #### 📁 `/pages`
 
-Содержит **страницы приложения**, соответствующие маршрутам (routes).
+Enthält die **Seiten der Anwendung**, die den jeweiligen Routen (Routes) entsprechen.
 
 #### 📁 `/components`
 
-Хранятся **переиспользуемые UI-компоненты** и общие визуальные блоки, не относящиеся напрямую к конкретным фичам.
+Hier liegen **wiederverwendbare UI-Komponenten** und allgemeine visuelle Bausteine, die nicht direkt an bestimmte Features gebunden sind.
 
 #### 📁 `/features`
 
-Каждая фича (feature) — это **логически изолированная область приложения**:
+Jedes Feature ist ein **logisch isolierter Bereich der Anwendung**:
 
 ```
 features/
-  auth/         # Аутентификация
-  projects/     # Проекты
-  tasks/        # Таски
+  auth/         # Authentifizierung
+  projects/     # Projekte
+  statuses/     # Aufgabenstatus (Task Statuses)
+  tasks/        # Aufgaben (Tasks)
+  user/         # Benutzerdaten & Profil
 ```
 
-Внутри каждой фичи:
+Aufbau innerhalb jedes Features:
 
-| Папка       | Назначение                          |
-| ----------- | ----------------------------------- |
-| `slice.ts`  | Redux slice + бизнес-логика         |
-| `services/` | API-запросы, связанные с этой фичей |
-| `types.ts`  | Локальные типы для данной фичи      |
+| Ordner / Datei | Zweck                                         |
+|----------------|-----------------------------------------------|
+| `slice/`       | Redux-Slice + Geschäftslogik                  |
+| `services/`    | API-Anfragen, die zu diesem Feature gehören   |
+| `types/`       | Lokale Typen & DTOs für das jeweilige Feature |
+
+#### 📁 `/lib` & `/utils`
+
+* **`/lib`**: Konfiguration externer Bibliotheken (z. B. `axiosInstance.ts`).
+* **`/utils`**: Allgemeine Hilfsfunktionen (Helper), die projektweit genutzt werden.
 
 #### 📁 `/types`
 
-Глобальные типы, общие для всего приложения (например, `User`, `Tokens`, `ApiError` и т.д.).
+Globale Typen, die in der gesamten Anwendung genutzt werden (z. B. `User`, `Tokens`, `ApiError` usw.).
 
 ---
 
+### 🚀 CI/CD & Deployment
+
+* **CI/CD-Pipeline (`/.github/workflows/ci.yml`)**: Bei jedem `push` oder `pull_request` auf `develop` und `main` werden automatisch Abhängigkeiten installiert, der Linter ausgeführt (`npm run lint`) und der Production-Build geprüft (`npm run build`). Bei einem Push auf `develop` erfolgt anschließend das automatische Deployment per SSH auf den VPS.
+* **Docker & Nginx (`/Dockerfile`, `/nginx/default.conf`)**: Die Anwendung wird als Container gebaut und über Nginx mit HTTPS-Unterstützung (Let's Encrypt SSL) ausgeliefert.
+* **Live-Demo**: [https://dushyna.site](https://dushyna.site)
+
+---
