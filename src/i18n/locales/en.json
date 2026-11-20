@@ -1,0 +1,465 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "projects": "Projects",
+    "signUp": "Sign up",
+    "signIn": "Sign in",
+    "logout": "Logout"
+  },
+  "about": {
+    "pageTitle": "TrackerApp | About",
+    "badge": "About Tracker App",
+    "heroTitle": "Simple. Clear. Effective.",
+    "heroDescStart": "Keep a full overview of your projects and get your tasks done without chaos. Whether in everyday life, university, or at work – with ",
+    "heroDescEnd": " you organize your workflows just the way that suits you.",
+    "howItWorksTitle": "How it works in 3 steps",
+    "howItWorksSubtitle": "From your first project to a completed task",
+    "stepLabel": "STEP {{step}}",
+    "steps": {
+      "s1Title": "Create projects",
+      "s1Desc": "Create a dedicated project in the “Projects” tab for every area of life or initiative. On the “Home” page, you can test all features upfront in demo mode.",
+      "s2Title": "Customize status columns",
+      "s2Desc": "Define custom columns like “To Do”, “In Progress”, or “Done”. Flexibly adapt your workflow anytime and track your progress visually.",
+      "s3Title": "Manage tasks",
+      "s3Desc": "Create task cards, add details, comments, or attachments, and simply drag them to the next status column as progress changes."
+    },
+    "useCasesTitle": "What can you use TaskTracker for?",
+    "useCasesSubtitle": "Flexible enough for every area of your life",
+    "useCases": {
+      "workTitle": "Work & Freelancing",
+      "workDesc": "Manage client projects, plan sprints, invite team members via “Invite User”, and keep every deadline safely in sight.",
+      "studyTitle": "Studies & Education",
+      "studyDesc": "Organize exam phases, term papers, reading lists, and learning goals in one structured place.",
+      "lifeTitle": "Everyday & Personal Life",
+      "lifeDesc": "Plan your next vacation, a move, renovations, or weekly to-dos completely stress-free.",
+      "ideasTitle": "Hobbies & Side Projects",
+      "ideasDesc": "Collect ideas for your own app projects or creative endeavors and bring them to life step by step."
+    },
+    "ctaTitle": "Ready to get started?",
+    "ctaDesc": "Create your first project now or test the board directly on the home page.",
+    "ctaDemo": "Try Demo",
+    "ctaProjects": "Go to Projects"
+  },
+  "home": {
+    "welcomeTitle": "Welcome to Tracker App!",
+    "welcomeSubtitle": "Right here on the home page, you can test in sandbox mode how to create status columns and task cards.",
+    "demoTitle": "Try the demo version with sample projects (no registration required):",
+    "demoSubtitle": "Would you like to try realistic real-world examples (e.g., Hotel Housekeeping, Restaurant Shift Operations, or IT Release Planning) with checklists, labels, and comments? Here's how:",
+    "step1": "Click <loginLink>Sign in</loginLink> in the top right corner and select <highlight>\"Quick Demo Login\"</highlight>.",
+    "step2": "Then switch to the <projectsLink>Projects</projectsLink> tab in the top menu to open the prepared sample projects.",
+    "step3": "Move tasks via drag & drop, edit checklists, or test the filter functions.",
+    "columnPlaceholder": "Enter column name (e.g., In Progress)...",
+    "addColumnBtn": "Add column",
+    "cancelBtn": "Cancel",
+    "addColumnTrigger": "+ Add column (Task status)"
+  },
+  "cardModal": {
+    "you": "You",
+    "addedToday": "Added today",
+    "justNow": "just now",
+    "attachedFile": "attached {{name}}",
+    "attachedLink": "attached a link",
+    "commented": "commented: \"{{text}}\"",
+    "change": "Change",
+    "members": "Members",
+    "labels": "Labels",
+    "dueDate": "Due Date",
+    "at": "at",
+    "description": "Description",
+    "descriptionPlaceholder": "Add description...",
+    "attachments": "Attachments",
+    "delete": "Delete",
+    "addItemPlaceholder": "Add item...",
+    "add": "Add",
+    "activity": "Activity",
+    "showDetails": "Show Details",
+    "commentPlaceholder": "Write a comment...",
+    "save": "Save",
+    "saveChanges": "Save changes",
+    "addToCard": "Add to card",
+    "actions": {
+      "members": "Members",
+      "labels": "Labels",
+      "checklist": "Checklist",
+      "dates": "Dates",
+      "attachment": "Attachment",
+      "cover": "Cover"
+    },
+    "attachFrom": "Attach from...",
+    "computer": "Computer",
+    "attachLinkLabel": "Attach a link",
+    "pasteLinkPlaceholder": "Paste link here...",
+    "displayNameLabel": "Display name (optional)",
+    "displayNamePlaceholder": "Text to display",
+    "cancel": "Cancel",
+    "attach": "Attach",
+    "setDates": "Set Dates",
+    "days": {
+      "mo": "Mo",
+      "tu": "Tu",
+      "we": "We",
+      "th": "Th",
+      "fr": "Fr",
+      "sa": "Sa",
+      "su": "Su"
+    },
+    "startDate": "Start Date",
+    "setReminder": "Set Reminder",
+    "reminders": {
+      "oneDayBefore": "1 day before",
+      "atDueDate": "At time of due date",
+      "none": "None"
+    },
+    "saveDate": "Save Date",
+    "addLabels": "Add Labels",
+    "titleChecklist": "Title Checklist",
+    "checklistPlaceholder": "Checklist name...",
+    "addChecklist": "Add Checklist",
+    "styleCover": "Style Cover",
+    "uploadPhoto": "+ Upload Photo"
+  },
+  "confirmModal": {
+    "defaultTitle": "Confirm action",
+    "defaultConfirm": "Discard",
+    "defaultCancel": "Cancel",
+    "processing": "Processing..."
+  },
+  "dynamicForm": {
+    "defaultSubmit": "Submit",
+    "forgotPassword": "Forgot password?",
+    "discardTitle": "Discard changes?",
+    "discardMessage": "You have unsaved changes. This action cannot be undone.",
+    "discardConfirm": "Discard",
+    "discardCancel": "Continue editing"
+  },
+  "notificationModal": {
+    "defaultTitle": "System notification",
+    "defaultButton": "Cancel"
+  },
+  "login": {
+    "pageTitle": "TrackerApp | Sign In",
+    "title": "Sign In",
+    "description": "Enter your credentials to access the system",
+    "descriptionConfirmed": "🎉 Email confirmed! Please log in.",
+    "submit": "Login",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "validation": {
+      "emailInvalid": "Invalid email address",
+      "emailRequired": "Email is required",
+      "passwordMin": "Password must be at least 8 characters",
+      "passwordRequired": "Password is required"
+    },
+    "guestAccess": "Portfolio Guest Access",
+    "demoLoading": "Connecting to Demo...",
+    "demoButton": "Quick Demo Login"
+  },
+  "register": {
+    "pageTitle": "TrackerApp | Sign Up",
+    "title": "Create Account",
+    "description": "Enter your email and password to register",
+    "submit": "Register Now",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "confirmPasswordLabel": "Confirm Password",
+    "validation": {
+      "emailInvalid": "Invalid email address",
+      "emailRequired": "Email is required",
+      "passwordMin": "Password must be at least 8 characters",
+      "passwordRequired": "Password is required",
+      "passwordsMismatch": "Passwords must match",
+      "confirmPasswordRequired": "Confirm Password is required"
+    }
+  },
+  "resetPassword": {
+    "pageTitle": "TrackerApp | Password reset",
+    "title": "Reset Password",
+    "description": "Enter your new secret sequence",
+    "descriptionSuccess": "✅ Password updated! Redirecting to login...",
+    "submit": "Update Password",
+    "checkingLink": "Checking reset link...",
+    "newPasswordLabel": "New Password",
+    "confirmPasswordLabel": "Confirm New Password",
+    "validation": {
+      "passwordMin": "Password must be at least 8 characters",
+      "required": "Required",
+      "passwordsMismatch": "Passwords must match"
+    },
+    "errors": {
+      "missingToken": "Reset token is missing",
+      "invalidLink": "Reset link is invalid or expired",
+      "failed": "Failed to reset password"
+    }
+  },
+  "projectLogs": {
+    "modalTitle": "Project Logs",
+    "noLogs": "No logs yet",
+    "entities": {
+      "task": "task",
+      "status": "status"
+    },
+    "verbs": {
+      "created": "created",
+      "deleted": "deleted",
+      "moved": "moved",
+      "added": "added",
+      "removed": "removed",
+      "changed": "changed",
+      "set": "set"
+    },
+    "createDeleteRest": "{{entity}}: {{name}} {{diff}}",
+    "moveRest": "{{entity}}: {{name}}. {{diff}}.",
+    "markerRest": "marker: {{marker}} on {{entity}}: {{name}}.",
+    "titleRest": "title on {{entity}}: {{diff}}.",
+    "descriptionRest": "description on {{entity}}: {{name}}. {{diff}}.",
+    "fromTo": "From: {{from}} to: {{to}}",
+    "titleDiff": "{{oldTitle}}. From: \"{{oldTitle}}\" to: \"{{newTitle}}\"",
+    "descriptionDiff": "From \"{{oldDesc}}\" to \"{{newDesc}}\"",
+    "inStatus": "in status: {{status}}.",
+    "deadlineAdded": "deadline on {{entity}}: {{name}} to: {{date}}.",
+    "deadlineRemoved": "deadline on {{entity}}: {{name}}. (Deadline was: {{date}}).",
+    "deadlineChanged": "deadline on {{entity}}: {{name}}. From: {{from}} to: {{to}}."
+  },
+  "boardHeader": {
+    "loading": "Loading...",
+    "addStatus": "Add Status",
+    "inviteUser": "Invite User",
+    "projectLogs": "Project Logs",
+    "searchPlaceholder": "SEARCH TASK...",
+    "resetFilter": "Reset"
+  },
+  "boardModals": {
+    "accessDenied": "ACCESS DENIED",
+    "close": "Cancel",
+    "deleteColumnTitle": "Delete column?",
+    "deleteColumnMessage": "Are you sure you want to delete the column \"{{name}}\"? All data in this column will be erased.",
+    "deleteConfirm": "Delete",
+    "cancel": "Cancel"
+  },
+  "collaborators": {
+    "noRoles": "No roles",
+    "inviteTooltip": "Invite new collaborator"
+  },
+  "column": {
+    "emptyNameTitle": "Empty Name",
+    "emptyNameMessage": "The status name cannot be empty. Please enter at least one character.",
+    "duplicateTitle": "Duplicate Status",
+    "duplicateMessage": "A column with the name \"{{name}}\" already exists on this board. Names must be unique.",
+    "editNameTooltip": "Click to edit name",
+    "gotIt": "Got it",
+    "accessDenied": "Access Denied",
+    "close": "Close",
+    "newTask": "New Task",
+    "deleteColumn": "Delete column"
+  },
+  "createStatusModal": {
+    "title": "New Status",
+    "placeholder": "Column title",
+    "positionLabel": "Position (0 – {{max}})",
+    "cancel": "Cancel",
+    "creating": "Creating...",
+    "create": "Create"
+  },
+  "inviteModal": {
+    "title": "Invite Collaborator",
+    "emailPlaceholder": "User email",
+    "roles": {
+      "member": "Member",
+      "admin": "Admin",
+      "viewer": "Viewer"
+    },
+    "cancel": "Cancel",
+    "invite": "Invite"
+  },
+  "kanbanBoard": {
+    "pageTitleLoading": "Loading...",
+    "loadingColumns": "Loading project column...",
+    "accessDenied": "Access Denied"
+  },
+  "projectEditModal": {
+    "title": "Edit Project",
+    "description": "Update project details",
+    "titleLabel": "Project Title",
+    "titlePlaceholder": "Enter project title",
+    "descriptionLabel": "Project Description",
+    "descriptionPlaceholder": "Enter project description",
+    "submit": "Save Changes",
+    "validation": {
+      "titleRequired": "Title is required",
+      "titleInvalid": "Project title should be at least 3 to 50 characters long and start with a capital letter. Special characters cannot be used",
+      "descriptionRequired": "Description is required"
+    }
+  },
+  "projectForm": {
+    "pageTitle": "TrackerApp | New project",
+    "accessDeniedTitle": "Access Denied",
+    "authRequired": "Authorization required to create project",
+    "login": "Login",
+    "cancel": "Cancel",
+    "title": "New Project",
+    "description": "Enter the project title and description",
+    "titleLabel": "Title",
+    "titlePlaceholder": "New Website Development",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "A Project to develop a new company website",
+    "submit": "Create Project",
+    "validation": {
+      "titleRequired": "Title is required",
+      "titleInvalid": "Project title should be at least 3 to 50 characters long and start with a capital letter. Special characters cannot be used",
+      "descriptionRequired": "Description is required"
+    }
+  },
+  "projectsList": {
+    "pageTitle": "TrackerApp | Projects",
+    "title": "Projects",
+    "newProject": "New Project",
+    "openProjectAria": "Open {{title}}",
+    "edit": "Edit",
+    "delete": "Delete",
+    "deleteModalTitle": "Delete project?",
+    "deleteModalMessage": "Are you sure you want to delete \"{{title}}\"? All data will be wiped from the grid.",
+    "deleting": "Deleting...",
+    "cancel": "Cancel",
+    "accessDenied": "ACCESS_DENIED"
+  },
+  "sortableTask": {
+    "taskNumber": "Task #{{number}}",
+    "deleteTooltip": "Delete task",
+    "deleteModalTitle": "Delete task?",
+    "deleteModalMessage": "Are you sure you want to delete \"{{title}}\"? This action cannot be undone.",
+    "deleting": "Deleting...",
+    "delete": "Delete",
+    "cancel": "Cancel"
+  },
+  "taskModal": {
+    "titleRequired": "Title is required.",
+    "heading": "Add Task to {{statusName}}",
+    "titlePlaceholder": "Title",
+    "descriptionPlaceholder": "Description (optional, max 200 chars)",
+    "cancel": "Cancel",
+    "creating": "Creating...",
+    "create": "Create"
+  },
+  "attachmentPicker": {
+    "title": "Attach from...",
+    "uploading": "Uploading...",
+    "computerFile": "💻 Computer (File)",
+    "attachLinkLabel": "Attach a link",
+    "pasteLinkPlaceholder": "Paste link here...",
+    "attachLinkBtn": "Attach Link"
+  },
+  "editTaskModal": {
+    "unknownStatus": "Unknown Status",
+    "taskNumber": "Task #{{number}}",
+    "statusLabel": "Status:",
+    "systemAlert": "System Alert // {{error}}",
+    "labels": "Labels",
+    "members": "Members",
+    "deadline": "Deadline",
+    "description": "Description",
+    "descriptionPlaceholder": "Add a more detailed description...",
+    "historyTitle": "HISTORY",
+    "initialized": "Initialized",
+    "lastUpdate": "Last Update",
+    "justNow": "Just now"
+  },
+  "taskAttachments": {
+    "title": "Attachments",
+    "filesCount_one": "{{count}} file",
+    "filesCount_other": "{{count}} files",
+    "deleteTooltip": "Delete attachment",
+    "deleteModalTitle": "Delete attachment?",
+    "deleteModalMessage": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone.",
+    "delete": "Delete",
+    "cancel": "Cancel"
+  },
+  "taskChecklist": {
+    "title": "Checklist",
+    "hide": "Hide",
+    "addItemPlaceholder": "Add an item...",
+    "add": "Add"
+  },
+  "taskComments": {
+    "title": "Discussion",
+    "placeholder": "Write a comment...",
+    "sending": "Sending...",
+    "postComment": "Post Comment",
+    "empty": "No comments yet. Be the first to start the discussion!",
+    "cancel": "Cancel",
+    "saveChanges": "Save Changes",
+    "editTooltip": "Edit comment",
+    "deleteTooltip": "Delete comment",
+    "deleteModalTitle": "Delete comment?",
+    "deleteModalMessage": "Are you sure you want to remove this message? This action is permanent.",
+    "delete": "Delete",
+    "accessDenied": "ACCESS_DENIED"
+  },
+  "taskSidebar": {
+    "heading": "Add to task",
+    "actions": {
+      "members": "Members",
+      "labels": "Labels",
+      "checklist": "Checklist",
+      "dates": "Dates",
+      "attachment": "Attachment"
+    },
+    "pastDeadlineError": "Deadline cannot be in the past! Please select a future date.",
+    "labelsTitle": "Labels",
+    "deleteGlobalLabelAria": "Delete global label",
+    "createLabelPlaceholder": "Create new label...",
+    "createAndAdd": "Create & Add",
+    "membersTitle": "Members",
+    "closeWithoutSaving": "Close without saving",
+    "setDeadline": "Set Deadline",
+    "selectDate": "Select Month & Day",
+    "time": "Time",
+    "saveDeadline": "Save Deadline",
+    "remove": "Remove",
+    "deleteLabelTitle": "Delete Label",
+    "deleteLabelMessage": "This will permanently remove the label from the entire project and all associated tasks. Proceed?",
+    "confirmDelete": "Confirm Delete",
+    "cancel": "Cancel"
+  },
+  "footer": {
+    "rights": "All rights reserved."
+  },
+  "forgotPassword": {
+    "pageTitle": "TrackerApp | Password recovery",
+    "title": "Forgot Password",
+    "description": "Enter your email to receive a recovery link",
+    "successMessage": "🎉 If this email exists, a reset link has been sent!",
+    "submit": "Send Recovery Link",
+    "emailLabel": "Email",
+    "genericError": "Something went wrong",
+    "validation": {
+      "emailInvalid": "Invalid email address",
+      "required": "Required"
+    }
+  },
+  "profile": {
+    "pageTitleLoading": "Loading...",
+    "loadingUser": "Loading user...",
+    "title": "User Profile",
+    "emailLoginLabel": "E-mail / Login:",
+    "emailSavedAlert": "email_saved!",
+    "editEmail": "Edit E-mail",
+    "changeAvatar": "Change Avatar",
+    "avatarSizeTypeError": "Only JPEG and PNG files smaller than 5MB are allowed as Avatar",
+    "updateErrorAlert": "Failed to update profile",
+    "fields": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "birthDate": "Birth Date",
+      "city": "City",
+      "phone": "Phone"
+    },
+    "aboutLabel": "About:",
+    "notSet": "Not set",
+    "editProfile": "Edit Profile",
+    "save": "Save",
+    "cancel": "Cancel"
+  }
+
+
+}

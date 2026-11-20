@@ -1,5 +1,5 @@
 import {type FormikValues, useFormik} from "formik";
-import type {FormikHelpers} from 'formik';
+import type {FormikHelpers} from "formik";
 import * as Yup from "yup";
 import NeonButton from "./buttons/NeonButton.tsx";
 import FormContainer from "./FormContainer";
@@ -8,6 +8,7 @@ import {getErrorMessage} from "../../utils/utils";
 import {useState} from "react";
 import ConfirmModal from "./ConfirmModal.tsx";
 import {useNavigate} from "react-router-dom";
+import {useTranslation} from "react-i18next";
 
 type DynamicFormProps<T extends FormikValues> = {
     title: string;
@@ -20,6 +21,7 @@ type DynamicFormProps<T extends FormikValues> = {
     submitText?: string;
     errorMessage?: string;
     isLoading?: boolean;
+    showForgotPassword?: boolean;
 };
 
 function DynamicForm<T extends FormikValues>({
@@ -30,10 +32,12 @@ function DynamicForm<T extends FormikValues>({
                                                  validationSchema,
                                                  onSubmit,
                                                  onClose,
-                                                 submitText = "Submit",
+                                                 submitText,
                                                  errorMessage,
                                                  isLoading,
+                                                 showForgotPassword,
                                              }: DynamicFormProps<T>) {
+    const {t} = useTranslation();
     const formik = useFormik<T>({
         initialValues,
         validationSchema,
@@ -44,9 +48,9 @@ function DynamicForm<T extends FormikValues>({
     const [passwordVisibility, setPasswordVisibility] = useState<Record<string, boolean>>({});
 
     const togglePassword = (fieldName: string) => {
-        setPasswordVisibility(prev => ({
+        setPasswordVisibility((prev) => ({
             ...prev,
-            [fieldName]: !prev[fieldName]
+            [fieldName]: !prev[fieldName],
         }));
     };
     const navigate = useNavigate();
@@ -67,6 +71,8 @@ function DynamicForm<T extends FormikValues>({
         setShowConfirm(false);
     };
 
+    const resolvedSubmitText = submitText ?? t("dynamicForm.defaultSubmit");
+    const isLoginForm = showForgotPassword ?? (title === "Sign In" || title === "Anmelden");
 
     return (
         <FormContainer
@@ -83,7 +89,7 @@ function DynamicForm<T extends FormikValues>({
                     onClick={formik.submitForm}
                     className="w-full justify-center"
                 >
-                    {submitText}
+                    {resolvedSubmitText}
                 </NeonButton>
             }
         >
@@ -108,10 +114,11 @@ function DynamicForm<T extends FormikValues>({
                         <div className="relative">
                             <input
                                 {...formik.getFieldProps(field.name)}
-
                                 type={
                                     field.type === "password"
-                                        ? (passwordVisibility[field.name] ? "text" : "password")
+                                        ? passwordVisibility[field.name]
+                                            ? "text"
+                                            : "password"
                                         : field.type || "text"
                                 }
                                 placeholder={field.placeholder}
@@ -140,33 +147,30 @@ function DynamicForm<T extends FormikValues>({
                         </p>
                     )}
 
-                    {field.name === "password" && title === "Sign In" && (
+                    {field.name === "password" && isLoginForm && (
                         <div className="flex justify-end pr-1">
                             <button
                                 type="button"
-                                onClick={() => navigate('/forgot-password')}
+                                onClick={() => navigate("/forgot-password")}
                                 className="text-[10px] text-cyan-400/50 hover:text-cyan-400 uppercase font-black tracking-tighter transition-all duration-300 hover:tracking-normal active:scale-95"
                             >
-                                Forgot password?
+                                {t("dynamicForm.forgotPassword")}
                             </button>
                         </div>
                     )}
-
                 </div>
             ))}
             {showConfirm && (
                 <ConfirmModal
-                    title="Discard changes?"
-                    message="You have unsaved changes. This action cannot be undone."
-                    confirmText="Discard"
-                    cancelText="Continue editing"
+                    title={t("dynamicForm.discardTitle")}
+                    message={t("dynamicForm.discardMessage")}
+                    confirmText={t("dynamicForm.discardConfirm")}
+                    cancelText={t("dynamicForm.discardCancel")}
                     onConfirm={handleConfirmDiscard}
                     onCancel={handleCancelDiscard}
                 />
             )}
-
         </FormContainer>
-
     );
 }
 

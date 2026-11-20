@@ -1,16 +1,18 @@
 import * as Yup from "yup";
-import { register, selectRegisterError } from "../slice/authSlice";
-import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { useNavigate } from "react-router-dom";
+import {register, selectRegisterError} from "../slice/authSlice";
+import {useAppDispatch, useAppSelector} from "../../../app/hooks";
+import {useNavigate} from "react-router-dom";
 import DynamicForm from "../../../components/ui/DynamicForm";
-import type { FieldConfig } from "../../../components/ui/types";
+import type {FieldConfig} from "../../../components/ui/types";
+import {useTranslation} from "react-i18next";
 
 const RegistrationForm = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const {t} = useTranslation();
     const authError = useAppSelector(selectRegisterError);
 
-    const  initialValues = {
+    const initialValues = {
         email: "",
         password: "",
         confirmPassword: "",
@@ -19,33 +21,35 @@ const RegistrationForm = () => {
     const fields: FieldConfig[] = [
         {
             name: "email",
-            label: "Email",
+            label: t("register.emailLabel"),
             type: "email",
             placeholder: "you@example.com"
         },
         {
             name: "password",
-            label: "Password",
+            label: t("register.passwordLabel"),
             type: "password",
             placeholder: "••••••••"
         },
         {
             name: "confirmPassword",
-            label: "Confirm Password",
+            label: t("register.confirmPasswordLabel"),
             type: "password",
             placeholder: "••••••••"
         },
     ];
 
-
     const validationSchema = Yup.object({
-        email: Yup.string().email("Invalid email address").required("Email is required"),
-        password: Yup.string().min(8, "Password must be at least 8 characters").required("Password is required"),
+        email: Yup.string()
+            .email(t("register.validation.emailInvalid"))
+            .required(t("register.validation.emailRequired")),
+        password: Yup.string()
+            .min(8, t("register.validation.passwordMin"))
+            .required(t("register.validation.passwordRequired")),
         confirmPassword: Yup.string()
-            .oneOf([Yup.ref("password")], "Passwords must match")
-            .required("Confirm Password is required"),
+            .oneOf([Yup.ref("password")], t("register.validation.passwordsMismatch"))
+            .required(t("register.validation.confirmPasswordRequired")),
     });
-
 
     const handleSubmit = async (values: typeof initialValues) => {
         try {
@@ -62,19 +66,18 @@ const RegistrationForm = () => {
         }
     };
 
-
     return (
         <div className="min-h-screen flex items-start justify-center p-4">
             <div className="w-full max-w-md">
                 <DynamicForm
-                    title="Create Account"
-                    description="Enter your email and password to register"
+                    title={t("register.title")}
+                    description={t("register.description")}
                     fields={fields}
                     initialValues={initialValues}
                     validationSchema={validationSchema}
                     onSubmit={handleSubmit}
                     onClose={() => navigate("/")}
-                    submitText="Register Now"
+                    submitText={t("register.submit")}
                     errorMessage={authError}
                 />
             </div>

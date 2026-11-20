@@ -12,13 +12,15 @@ import {
 import {selectIsAuthenticated, selectIsInitialized, setUser} from "../features/auth/slice/authSlice.ts";
 import type {UpdateUserPayloadDto} from "../features/user/types";
 import MainButton from "../components/ui/buttons/MainButton.tsx";
+import {useTranslation} from "react-i18next";
 
 export default function Profile() {
     const dispatch = useAppDispatch();
+    const {t} = useTranslation();
     const user = useAppSelector(selectUserData);
     const isAuthInitialized = useAppSelector(selectIsInitialized);
     const isAuthenticated = useAppSelector(selectIsAuthenticated);
-    usePageTitle(user ? `TrackerApp | ${user.email}` : "Loading...");
+    usePageTitle(user ? `TrackerApp | ${user.email}` : t("profile.pageTitleLoading"));
 
     useEffect(() => {
         if (!isAuthInitialized) return;
@@ -57,12 +59,12 @@ export default function Profile() {
     const [phone, setPhone] = useState(user?.phone || "");
     const [about, setAbout] = useState(user?.about || "");
 
-    const fields: [string, string, Dispatch<SetStateAction<string>>][] = [
-        ["First Name", firstName, setFirstName],
-        ["Last Name", lastName, setLastName],
-        ["Birth Date", birthDate, setBirthDate],
-        ["City", city, setCity],
-        ["Phone", phone, setPhone],
+    const fields: [string, string, string, Dispatch<SetStateAction<string>>][] = [
+        ["firstName", t("profile.fields.firstName"), firstName, setFirstName],
+        ["lastName", t("profile.fields.lastName"), lastName, setLastName],
+        ["birthDate", t("profile.fields.birthDate"), birthDate, setBirthDate],
+        ["city", t("profile.fields.city"), city, setCity],
+        ["phone", t("profile.fields.phone"), phone, setPhone],
     ];
 
     const MAX_AVATAR_SIZE = 5 * 1024 * 1024;
@@ -73,7 +75,7 @@ export default function Profile() {
             const file = e.target.files[0];
 
             if (!ALLOWED_AVATAR_TYPES.includes(file.type) || file.size > MAX_AVATAR_SIZE) {
-                setErrorMessage("Only JPEG and PNG files smaller than 5MB are allowed as Avatar");
+                setErrorMessage(t("profile.avatarSizeTypeError"));
                 return;
             }
 
@@ -137,7 +139,7 @@ export default function Profile() {
             console.log("Saved profile:", payload);
         } catch (err) {
             console.error("Failed to update profile", err);
-            alert("Failed to update profile");
+            alert(t("profile.updateErrorAlert"));
         }
     };
 
@@ -155,7 +157,7 @@ export default function Profile() {
     if (!user) {
         return (
             <section className="p-8 flex items-center justify-center text-white">
-                Loading user...
+                {t("profile.loadingUser")}
             </section>
         );
     }
@@ -163,13 +165,13 @@ export default function Profile() {
     return (
         <section className="p-8 bg-transparent border border-cyan-900/50 rounded-2xl">
             <h1 className="text-cyan-300 text-3xl font-black uppercase tracking-[0.2em] mb-6 text-glow">
-                User Profile
+                {t("profile.title")}
             </h1>
 
             {/* E-mail / Login */}
             <div className="flex items-center gap-4 mb-6">
                 <div className="font-bold text-cyan-300 whitespace-nowrap">
-                    E-mail / Login:
+                    {t("profile.emailLoginLabel")}
                 </div>
 
                 <div className="flex-1 flex items-center gap-4">
@@ -183,16 +185,16 @@ export default function Profile() {
                             />
                             <div className="flex w-[220px] gap-4">
                                 <MainButton onClick={() => {
-                                    alert("email_saved!");
+                                    alert(t("profile.emailSavedAlert"));
                                     setIsEditingEmail(false);
                                 }}>
-                                    Save
+                                    {t("profile.save")}
                                 </MainButton>
                                 <MainButton variant="danger" onClick={() => {
                                     setIsEditingEmail(false);
                                     setEmail(user.email || "");
                                 }}>
-                                    Cancel
+                                    {t("profile.cancel")}
                                 </MainButton>
                             </div>
                         </>
@@ -203,7 +205,7 @@ export default function Profile() {
                                 {email}
                             </div>
                             <MainButton width={220} onClick={() => setIsEditingEmail(true)}>
-                                Edit E-mail
+                                {t("profile.editEmail")}
                             </MainButton>
                         </>
                     )}
@@ -242,10 +244,10 @@ export default function Profile() {
                     {isEditingAvatar ? (
                         <div className="flex mt-5 gap-4 w-[220px] justify-center">
                             <MainButton onClick={handleSaveAvatarUpdate}>
-                                Save
+                                {t("profile.save")}
                             </MainButton>
                             <MainButton variant="danger" onClick={handleCancelAvatarUpdate}>
-                                Cancel
+                                {t("profile.cancel")}
                             </MainButton>
                         </div>
                     ) : (
@@ -255,7 +257,7 @@ export default function Profile() {
                                 document.getElementById("avatarInput")?.click()
                             }}
                             >
-                                Change Avatar
+                                {t("profile.changeAvatar")}
                             </MainButton>
                         </div>
                     )}
@@ -273,8 +275,8 @@ export default function Profile() {
                     <div className="flex gap-6">
                         {/* Left info block */}
                         <div className="flex-1 space-y-4">
-                            {fields.map(([label, value, setter]) => (
-                                <div key={label as string} className="flex items-center gap-2">
+                            {fields.map(([key, label, value, setter]) => (
+                                <div key={key} className="flex items-center gap-2">
                                     <label className="w-32 font-bold text-cyan-300">{label}:</label>
                                     {isEditingProfile ? (
                                         <input
@@ -288,7 +290,7 @@ export default function Profile() {
                                     ) : (
                                         <span
                                             className="flex-1 px-1 py-[5px] text-white text-base bg-transparent rounded border border-cyan-300">
-                                            {value || "Not set"}
+                                            {value || t("profile.notSet")}
                                         </span>
                                     )}
                                 </div>
@@ -297,7 +299,7 @@ export default function Profile() {
 
                         {/* Right about block */}
                         <div className="flex-1 flex flex-col">
-                            <label className="font-bold text-cyan-300 mb-2">About:</label>
+                            <label className="font-bold text-cyan-300 mb-2">{t("profile.aboutLabel")}</label>
                             {isEditingProfile ? (
                                 <textarea
                                     value={about}
@@ -305,7 +307,7 @@ export default function Profile() {
                                     className="flex-1 p-2 rounded border border-cyan-300 bg-slate-800 text-white resize-none"
                                 />
                             ) : (
-                                <p className="flex-1 p-2 text-white border rounded border-cyan-300 bg-transparent">{about || "Not set"}</p>
+                                <p className="flex-1 p-2 text-white border rounded border-cyan-300 bg-transparent">{about || t("profile.notSet")}</p>
                             )}
                         </div>
                     </div>
@@ -315,15 +317,15 @@ export default function Profile() {
                         {isEditingProfile ? (
                             <div className="w-[220px] flex gap-4">
                                 <MainButton onClick={handleSaveProfileChanges}>
-                                    Save
+                                    {t("profile.save")}
                                 </MainButton>
                                 <MainButton variant="danger" onClick={handleCancelProfileChanges}>
-                                    Cancel
+                                    {t("profile.cancel")}
                                 </MainButton>
                             </div>
                         ) : (
                             <MainButton width={220} onClick={() => setIsEditingProfile(true)}>
-                                Edit Profile
+                                {t("profile.editProfile")}
                             </MainButton>
                         )}
                     </div>

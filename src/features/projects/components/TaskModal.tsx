@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState, useCallback } from "react";
-import { useAppSelector } from "../../../app/hooks";
-import { selectIsLoading } from "../../tasks/slice/tasksSlice";
+import {useEffect, useRef, useState, useCallback} from "react";
+import {useAppSelector} from "../../../app/hooks";
+import {selectIsLoading} from "../../tasks/slice/tasksSlice";
+import {useTranslation} from "react-i18next";
 
 export function TaskModal({
                               isOpen,
@@ -13,6 +14,7 @@ export function TaskModal({
     onCreate: (title: string, description: string) => void;
     statusName: string;
 }) {
+    const {t} = useTranslation();
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [error, setError] = useState("");
@@ -50,7 +52,7 @@ export function TaskModal({
     const handleSubmit = () => {
 
         if (title.trim() === "") {
-            setError("Title is required.");
+            setError(t("taskModal.titleRequired"));
             return;
         }
 
@@ -64,11 +66,11 @@ export function TaskModal({
     return (
         <div className="fixed inset-0 bg-black/60 bg-opacity-40 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg p-6 w-96 text-black shadow-lg">
-                <h2 className="text-lg font-semibold mb-4">Add Task to {statusName}</h2>
+                <h2 className="text-lg font-semibold mb-4">{t("taskModal.heading", {statusName})}</h2>
                 <input
                     ref={titleRef}
                     type="text"
-                    placeholder="Title"
+                    placeholder={t("taskModal.titlePlaceholder")}
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     className={`w-full px-2 py-1 text-sm text-[#0f172a] font-bold focus:outline-none bg-transparent placeholder:text-slate-400 ${
@@ -76,7 +78,7 @@ export function TaskModal({
                     }`}
                 />
                 <textarea
-                    placeholder="Description (optional, max 200 chars)"
+                    placeholder={t("taskModal.descriptionPlaceholder")}
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     className={`w-full px-2 py-1 text-sm text-[#0f172a] font-bold focus:outline-none bg-transparent placeholder:text-slate-400 ${
@@ -90,7 +92,7 @@ export function TaskModal({
                         disabled={isLoading}
                         className="px-3 py-1 rounded border hover:bg-gray-100 transition"
                     >
-                        Cancel
+                        {t("taskModal.cancel")}
                     </button>
                     <button
                         onClick={handleSubmit}
@@ -102,16 +104,20 @@ export function TaskModal({
                         {isLoading ? (
                             <>
                                 {/* Spinner */}
-                                <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org" fill="none" viewBox="0 0 24 24">
-                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org" fill="none"
+                                     viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                            strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor"
+                                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                 </svg>
-                                <span>Creating...</span>
+                                <span>{t("taskModal.creating")}</span>
                             </>
                         ) : (
-                            "Create"
+                            t("taskModal.create")
                         )}
-                    </button>                </div>
+                    </button>
+                </div>
             </div>
         </div>
     );

@@ -6,10 +6,10 @@ import type {ProjectRole} from "../types";
 import type {Task} from "../../tasks/types";
 import ConfirmModal from "../../../components/ui/ConfirmModal";
 import {ProjectLogModal} from "./projectLog/ProjectLogModal.tsx";
-
-import { useAppSelector, useAppDispatch } from "../../../app/hooks";
-import { selectCreateTaskErrorMessage, clearTaskError } from "../../tasks/slice/tasksSlice";
+import {useAppSelector, useAppDispatch} from "../../../app/hooks";
+import {selectCreateTaskErrorMessage, clearTaskError} from "../../tasks/slice/tasksSlice";
 import NotificationModal from "../../../components/ui/NotificationModal";
+import {useTranslation} from "react-i18next";
 
 interface BoardModalsProps {
     modals: {
@@ -17,22 +17,22 @@ interface BoardModalsProps {
             isOpen: boolean;
             statusId: string | null;
             statusName: string;
-            onClose: () => void
+            onClose: () => void;
         };
         status: {
             isOpen: boolean;
             onClose: () => void;
-            maxPosition: number
+            maxPosition: number;
         };
         invite: {
             isOpen: boolean;
             onClose: () => void;
-            error?: string
+            error?: string;
         };
         edit: {
             taskId: string | null;
             task: Task | undefined;
-            onClose: () => void
+            onClose: () => void;
         };
         deleteStatus: {
             status: { id: string; name: string } | null;
@@ -41,7 +41,8 @@ interface BoardModalsProps {
         logs?: {
             isOpen: boolean;
             onClose: () => void;
-            projectId: string };
+            projectId: string;
+        };
     };
     actions: {
         onCreateTask: (title: string, description: string) => void;
@@ -49,22 +50,22 @@ interface BoardModalsProps {
         onInvite: (email: string, role: ProjectRole) => void;
         onDeleteStatus: (id: string, name: string) => void;
     };
-
 }
 
 export const BoardModals = ({modals, actions}: BoardModalsProps) => {
     const dispatch = useAppDispatch();
+    const {t} = useTranslation();
     const taskErrorMessage = useAppSelector(selectCreateTaskErrorMessage);
 
     return (
         <>
             {taskErrorMessage && (
                 <NotificationModal
-                    title="ACCESS DENIED"
+                    title={t("boardModals.accessDenied")}
                     message={taskErrorMessage}
-                    buttonText="Cancel"
+                    buttonText={t("boardModals.close")}
                     variant="error"
-                    onClose={() => dispatch(clearTaskError())} // Очищуємо помилку в Redux
+                    onClose={() => dispatch(clearTaskError())}
                 />
             )}
             {/* New Task */}
@@ -100,13 +101,18 @@ export const BoardModals = ({modals, actions}: BoardModalsProps) => {
             )}
             {modals.deleteStatus.status && (
                 <ConfirmModal
-                    title="Delete column?"
-                    message={`Are you sure you want to delete the column "${modals.deleteStatus.status.name}"? All data in this column will be erased.`}
-                    confirmText="Delete"
-                    cancelText="Cancel"
+                    title={t("boardModals.deleteColumnTitle")}
+                    message={t("boardModals.deleteColumnMessage", {
+                        name: modals.deleteStatus.status.name,
+                    })}
+                    confirmText={t("boardModals.deleteConfirm")}
+                    cancelText={t("boardModals.cancel")}
                     onConfirm={() => {
                         if (modals.deleteStatus.status) {
-                            actions.onDeleteStatus(modals.deleteStatus.status.id, modals.deleteStatus.status.name);
+                            actions.onDeleteStatus(
+                                modals.deleteStatus.status.id,
+                                modals.deleteStatus.status.name
+                            );
                             modals.deleteStatus.onClose();
                         }
                     }}

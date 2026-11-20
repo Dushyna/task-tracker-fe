@@ -1,0 +1,464 @@
+{
+  "nav": {
+    "home": "Startseite",
+    "about": "Über uns",
+    "projects": "Projekte",
+    "signUp": "Registrieren",
+    "signIn": "Anmelden",
+    "logout": "Abmelden"
+  },
+  "about": {
+    "pageTitle": "TrackerApp | Über uns",
+    "badge": "Über Tracker App",
+    "heroTitle": "Einfach. Übersichtlich. Effektiv.",
+    "heroDescStart": "Behalte den vollen Überblick über deine Projekte und erledige deine Aufgaben ohne Chaos. Egal ob im Alltag, im Studium oder bei der Arbeit – mit ",
+    "heroDescEnd": " organisierst du deine Workflows genau so, wie es zu dir passt.",
+    "howItWorksTitle": "So funktioniert’s in 3 Schritten",
+    "howItWorksSubtitle": "Vom ersten Projekt bis zur erledigten Aufgabe",
+    "stepLabel": "SCHRITT {{step}}",
+    "steps": {
+      "s1Title": "Projekte erstellen",
+      "s1Desc": "Lege im Tab „Projekte“ für jeden Lebensbereich oder jedes Vorhaben ein eigenes Projekt an. Auf der Startseite („Startseite“) kannst du die Funktionen vorab direkt im Demo-Modus testen.",
+      "s2Title": "Status-Spalten anpassen",
+      "s2Desc": "Definiere individuelle Spalten wie „To Do“, „In Arbeit“ oder „Erledigt“. Passe deinen Workflow jederzeit flexibel an und verfolge den Fortschritt visuell.",
+      "s3Title": "Aufgaben verwalten",
+      "s3Desc": "Erstelle Aufgabenkarten, ergänze Details, Kommentare oder Anhänge und verschiebe sie einfach in die nächste Status-Spalte, sobald sich der Stand ändert."
+    },
+    "useCasesTitle": "Wofür kannst du den TaskTracker nutzen?",
+    "useCasesSubtitle": "Flexibel einsetzbar für jeden Bereich deines Lebens",
+    "useCases": {
+      "workTitle": "Arbeit & Freelancing",
+      "workDesc": "Verwalte Kundenprojekte, plane Sprints, lade Teammitglieder über „Invite User“ ein und behalte alle Deadlines sicher im Blick.",
+      "studyTitle": "Studium & Weiterbildung",
+      "studyDesc": "Organisiere Prüfungsphasen, Hausarbeiten, Literatur und Lernziele strukturiert an einem zentralen Ort.",
+      "lifeTitle": "Alltag & Privatleben",
+      "lifeDesc": "Plane deinen nächsten Urlaub, einen Umzug, Renovierungen oder deine wöchentlichen To-dos ohne Stress.",
+      "ideasTitle": "Hobby & Side-Projects",
+      "ideasDesc": "Sammle Ideen für eigene App-Projekte oder kreative Vorhaben und setze sie Schritt für Schritt in die Tat um."
+    },
+    "ctaTitle": "Bereit, durchzustarten?",
+    "ctaDesc": "Erstelle jetzt dein erstes Projekt oder teste das Board direkt auf der Startseite.",
+    "ctaDemo": "Demo testen",
+    "ctaProjects": "Zu den Projekten"
+  },
+  "home": {
+    "welcomeTitle": "Willkommen bei der Tracker App!",
+    "welcomeSubtitle": "Hier auf der Startseite können Sie direkt im Sandbox-Modus testen, wie man Status-Spalten anlegt und Aufgabenkarten erstellt.",
+    "demoTitle": "Demo-Version mit Beispielprojekten testen (ohne Registrierung):",
+    "demoSubtitle": "Möchten Sie realistische Praxisbeispiele (z. B. Hotel Housekeeping, Restaurant-Schichtbetrieb oder IT-Release-Planung) mit Checklisten, Markern und Kommentaren ausprobieren? So geht's:",
+    "step1": "Klicken Sie oben rechts auf <loginLink>Anmelden</loginLink> und wählen Sie <highlight>„Schneller Demo-Login“</highlight>.",
+    "step2": "Wechseln Sie danach oben im Menü auf den Tab <projectsLink>Projekte</projectsLink>, um die vorbereiteten Beispielprojekte zu öffnen.",
+    "step3": "Verschieben Sie Aufgaben per Drag & Drop, bearbeiten Sie Checklisten oder testen Sie die Filterfunktionen.",
+    "columnPlaceholder": "Spaltenname eingeben (z. B. In Arbeit)...",
+    "addColumnBtn": "Spalte hinzufügen",
+    "cancelBtn": "Abbrechen",
+    "addColumnTrigger": "+ Spalte hinzufügen (Task-Status)"
+  },
+  "cardModal": {
+    "you": "Du",
+    "addedToday": "Heute hinzugefügt",
+    "justNow": "gerade eben",
+    "attachedFile": "hat {{name}} angehängt",
+    "attachedLink": "hat einen Link angehängt",
+    "commented": "hat kommentiert: „{{text}}“",
+    "change": "Ändern",
+    "members": "Mitglieder",
+    "labels": "Labels",
+    "dueDate": "Fälligkeitsdatum",
+    "at": "um",
+    "description": "Beschreibung",
+    "descriptionPlaceholder": "Beschreibung hinzufügen...",
+    "attachments": "Anhänge",
+    "delete": "Löschen",
+    "addItemPlaceholder": "Element hinzufügen...",
+    "add": "Hinzufügen",
+    "activity": "Aktivität",
+    "showDetails": "Details anzeigen",
+    "commentPlaceholder": "Kommentar schreiben...",
+    "save": "Speichern",
+    "saveChanges": "Änderungen speichern",
+    "addToCard": "Zur Karte hinzufügen",
+    "actions": {
+      "members": "Mitglieder",
+      "labels": "Labels",
+      "checklist": "Checkliste",
+      "dates": "Datum",
+      "attachment": "Anhang",
+      "cover": "Cover"
+    },
+    "attachFrom": "Anhängen von...",
+    "computer": "Computer",
+    "attachLinkLabel": "Link anhängen",
+    "pasteLinkPlaceholder": "Link hier einfügen...",
+    "displayNameLabel": "Anzeigename (optional)",
+    "displayNamePlaceholder": "Anzuzeigender Text",
+    "cancel": "Abbrechen",
+    "attach": "Anhängen",
+    "setDates": "Datum festlegen",
+    "days": {
+      "mo": "Mo",
+      "tu": "Di",
+      "we": "Mi",
+      "th": "Do",
+      "fr": "Fr",
+      "sa": "Sa",
+      "su": "So"
+    },
+    "startDate": "Startdatum",
+    "setReminder": "Erinnerung festlegen",
+    "reminders": {
+      "oneDayBefore": "1 Tag vorher",
+      "atDueDate": "Zum Fälligkeitszeitpunkt",
+      "none": "Keine"
+    },
+    "saveDate": "Datum speichern",
+    "addLabels": "Labels hinzufügen",
+    "titleChecklist": "Titel der Checkliste",
+    "checklistPlaceholder": "Name der Checkliste...",
+    "addChecklist": "Checkliste hinzufügen",
+    "styleCover": "Cover gestalten",
+    "uploadPhoto": "+ Foto hochladen"
+  },
+  "confirmModal": {
+    "defaultTitle": "Aktion bestätigen",
+    "defaultConfirm": "Verwerfen",
+    "defaultCancel": "Abbrechen",
+    "processing": "Wird verarbeitet..."
+  },
+  "dynamicForm": {
+    "defaultSubmit": "Absenden",
+    "forgotPassword": "Passwort vergessen?",
+    "discardTitle": "Änderungen verwerfen?",
+    "discardMessage": "Du hast ungespeicherte Änderungen. Diese Aktion kann nicht rückgängig gemacht werden.",
+    "discardConfirm": "Verwerfen",
+    "discardCancel": "Weiter bearbeiten"
+  },
+  "notificationModal": {
+    "defaultTitle": "Systembenachrichtigung",
+    "defaultButton": "Schließen"
+  },
+  "login": {
+    "pageTitle": "TrackerApp | Anmelden",
+    "title": "Anmelden",
+    "description": "Gib deine Zugangsdaten ein, um auf das System zuzugreifen",
+    "descriptionConfirmed": "🎉 E-Mail bestätigt! Bitte melde dich an.",
+    "submit": "Anmelden",
+    "emailLabel": "E-Mail",
+    "passwordLabel": "Passwort",
+    "validation": {
+      "emailInvalid": "Ungültige E-Mail-Adresse",
+      "emailRequired": "E-Mail ist erforderlich",
+      "passwordMin": "Das Passwort muss mindestens 8 Zeichen lang sein",
+      "passwordRequired": "Passwort ist erforderlich"
+    },
+    "guestAccess": "Portfolio-Gastzugang",
+    "demoLoading": "Verbindung zur Demo...",
+    "demoButton": "Schneller Demo-Login"
+  },
+  "register": {
+    "pageTitle": "TrackerApp | Registrieren",
+    "title": "Konto erstellen",
+    "description": "Gib deine E-Mail-Adresse und dein Passwort ein, um dich zu registrieren",
+    "submit": "Jetzt registrieren",
+    "emailLabel": "E-Mail",
+    "passwordLabel": "Passwort",
+    "confirmPasswordLabel": "Passwort bestätigen",
+    "validation": {
+      "emailInvalid": "Ungültige E-Mail-Adresse",
+      "emailRequired": "E-Mail ist erforderlich",
+      "passwordMin": "Das Passwort muss mindestens 8 Zeichen lang sein",
+      "passwordRequired": "Passwort ist erforderlich",
+      "passwordsMismatch": "Passwörter müssen übereinstimmen",
+      "confirmPasswordRequired": "Passwortbestätigung ist erforderlich"
+    }
+  },
+  "resetPassword": {
+    "pageTitle": "TrackerApp | Passwort zurücksetzen",
+    "title": "Passwort zurücksetzen",
+    "description": "Gib deine neue geheime Zeichenfolge ein",
+    "descriptionSuccess": "✅ Passwort aktualisiert! Weiterleitung zur Anmeldung...",
+    "submit": "Passwort aktualisieren",
+    "checkingLink": "Reset-Link wird überprüft...",
+    "newPasswordLabel": "Neues Passwort",
+    "confirmPasswordLabel": "Neues Passwort bestätigen",
+    "validation": {
+      "passwordMin": "Das Passwort muss mindestens 8 Zeichen lang sein",
+      "required": "Pflichtfeld",
+      "passwordsMismatch": "Passwörter müssen übereinstimmen"
+    },
+    "errors": {
+      "missingToken": "Reset-Token fehlt",
+      "invalidLink": "Der Reset-Link ist ungültig oder abgelaufen",
+      "failed": "Passwort konnte nicht zurückgesetzt werden"
+    }
+  },
+  "projectLogs": {
+    "modalTitle": "Projektprotokoll",
+    "noLogs": "Noch keine Einträge vorhanden",
+    "entities": {
+      "task": "Aufgabe",
+      "status": "Status"
+    },
+    "verbs": {
+      "created": "hat erstellt",
+      "deleted": "hat gelöscht",
+      "moved": "hat verschoben",
+      "added": "hat hinzugefügt",
+      "removed": "hat entfernt",
+      "changed": "hat geändert",
+      "set": "hat festgelegt"
+    },
+    "createDeleteRest": "{{entity}}: {{name}} {{diff}}",
+    "moveRest": "{{entity}}: {{name}}. {{diff}}.",
+    "markerRest": "Marker: {{marker}} bei {{entity}}: {{name}}.",
+    "titleRest": "Titel bei {{entity}}: {{diff}}.",
+    "descriptionRest": "Beschreibung bei {{entity}}: {{name}}. {{diff}}.",
+    "fromTo": "Von: {{from}} nach: {{to}}",
+    "titleDiff": "{{oldTitle}}. Von: „{{oldTitle}}“ nach: „{{newTitle}}“",
+    "descriptionDiff": "Von „{{oldDesc}}“ nach „{{newDesc}}“",
+    "inStatus": "im Status: {{status}}.",
+    "deadlineAdded": "Frist für {{entity}}: {{name}} auf: {{date}}.",
+    "deadlineRemoved": "Frist für {{entity}}: {{name}}. (Frist war: {{date}}).",
+    "deadlineChanged": "Frist für {{entity}}: {{name}}. Von: {{from}} auf: {{to}}."
+  },
+  "boardHeader": {
+    "loading": "Wird geladen...",
+    "addStatus": "Status hinzufügen",
+    "inviteUser": "Benutzer einladen",
+    "projectLogs": "Projektprotokoll",
+    "searchPlaceholder": "AUFGABE SUCHEN...",
+    "resetFilter": "Zurücksetzen"
+  },
+  "boardModals": {
+    "accessDenied": "ZUGRIFF VERWEIGERT",
+    "close": "Schließen",
+    "deleteColumnTitle": "Spalte löschen?",
+    "deleteColumnMessage": "Möchten Sie die Spalte „{{name}}“ wirklich löschen? Alle Daten in dieser Spalte werden unwiderruflich gelöscht.",
+    "deleteConfirm": "Löschen",
+    "cancel": "Abbrechen"
+  },
+  "collaborators": {
+    "noRoles": "Keine Rollen",
+    "inviteTooltip": "Neues Mitglied einladen"
+  },
+  "column": {
+    "emptyNameTitle": "Leerer Name",
+    "emptyNameMessage": "Der Statusname darf nicht leer sein. Bitte geben Sie mindestens ein Zeichen ein.",
+    "duplicateTitle": "Doppelter Status",
+    "duplicateMessage": "Eine Spalte mit dem Namen „{{name}}“ existiert bereits auf diesem Board. Namen müssen eindeutig sein.",
+    "editNameTooltip": "Klicken, um den Namen zu bearbeiten",
+    "gotIt": "Verstanden",
+    "accessDenied": "Zugriff verweigert",
+    "close": "Schließen",
+    "newTask": "Neue Aufgabe",
+    "deleteColumn": "Spalte löschen"
+  },
+  "createStatusModal": {
+    "title": "Neuer Status",
+    "placeholder": "Spaltentitel",
+    "positionLabel": "Position (0 – {{max}})",
+    "cancel": "Abbrechen",
+    "creating": "Wird erstellt...",
+    "create": "Erstellen"
+  },
+  "inviteModal": {
+    "title": "Mitglied einladen",
+    "emailPlaceholder": "E-Mail-Adresse des Benutzers",
+    "roles": {
+      "member": "Mitglied",
+      "admin": "Administrator",
+      "viewer": "Betrachter"
+    },
+    "cancel": "Abbrechen",
+    "invite": "Einladen"
+  },
+  "kanbanBoard": {
+    "pageTitleLoading": "Wird geladen...",
+    "loadingColumns": "Projektspalten werden geladen...",
+    "accessDenied": "Zugriff verweigert"
+  },
+  "projectEditModal": {
+    "title": "Projekt bearbeiten",
+    "description": "Projektdetails aktualisieren",
+    "titleLabel": "Projekttitel",
+    "titlePlaceholder": "Projekttitel eingeben",
+    "descriptionLabel": "Projektbeschreibung",
+    "descriptionPlaceholder": "Projektbeschreibung eingeben",
+    "submit": "Änderungen speichern",
+    "validation": {
+      "titleRequired": "Titel ist erforderlich",
+      "titleInvalid": "Der Projekttitel muss 3 bis 50 Zeichen lang sein und mit einem Großbuchstaben beginnen. Sonderzeichen sind nicht erlaubt",
+      "descriptionRequired": "Beschreibung ist erforderlich"
+    }
+  },
+  "projectForm": {
+    "pageTitle": "TrackerApp | Neues Projekt",
+    "accessDeniedTitle": "Zugriff verweigert",
+    "authRequired": "Anmeldung erforderlich, um ein Projekt zu erstellen",
+    "login": "Anmelden",
+    "cancel": "Abbrechen",
+    "title": "Neues Projekt",
+    "description": "Projekttitel und Beschreibung eingeben",
+    "titleLabel": "Titel",
+    "titlePlaceholder": "Entwicklung einer neuen Website",
+    "descriptionLabel": "Beschreibung",
+    "descriptionPlaceholder": "Ein Projekt zur Entwicklung einer neuen Unternehmenswebsite",
+    "submit": "Projekt erstellen",
+    "validation": {
+      "titleRequired": "Titel ist erforderlich",
+      "titleInvalid": "Der Projekttitel muss 3 bis 50 Zeichen lang sein und mit einem Großbuchstaben beginnen. Sonderzeichen sind nicht erlaubt",
+      "descriptionRequired": "Beschreibung ist erforderlich"
+    }
+  },
+  "projectsList": {
+    "pageTitle": "TrackerApp | Projekte",
+    "title": "Projekte",
+    "newProject": "Neues Projekt",
+    "openProjectAria": "{{title}} öffnen",
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "deleteModalTitle": "Projekt löschen?",
+    "deleteModalMessage": "Möchten Sie „{{title}}“ wirklich löschen? Alle Daten werden unwiderruflich aus dem System entfernt.",
+    "deleting": "Wird gelöscht...",
+    "cancel": "Abbrechen",
+    "accessDenied": "ZUGRIFF_VERWEIGERT"
+  },
+  "sortableTask": {
+    "taskNumber": "Aufgabe #{{number}}",
+    "deleteTooltip": "Aufgabe löschen",
+    "deleteModalTitle": "Aufgabe löschen?",
+    "deleteModalMessage": "Möchten Sie „{{title}}“ wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+    "deleting": "Wird gelöscht...",
+    "delete": "Löschen",
+    "cancel": "Abbrechen"
+  },
+  "taskModal": {
+    "titleRequired": "Titel ist erforderlich.",
+    "heading": "Aufgabe zu {{statusName}} hinzufügen",
+    "titlePlaceholder": "Titel",
+    "descriptionPlaceholder": "Beschreibung (optional, max. 200 Zeichen)",
+    "cancel": "Abbrechen",
+    "creating": "Wird erstellt...",
+    "create": "Erstellen"
+  },
+  "attachmentPicker": {
+    "title": "Anhängen von...",
+    "uploading": "Wird hochgeladen...",
+    "computerFile": "💻 Computer (Datei)",
+    "attachLinkLabel": "Link anhängen",
+    "pasteLinkPlaceholder": "Link hier einfügen...",
+    "attachLinkBtn": "Link anhängen"
+  },
+  "editTaskModal": {
+    "unknownStatus": "Unbekannter Status",
+    "taskNumber": "Aufgabe #{{number}}",
+    "statusLabel": "Status:",
+    "systemAlert": "Systemwarnung // {{error}}",
+    "labels": "Labels",
+    "members": "Mitglieder",
+    "deadline": "Frist",
+    "description": "Beschreibung",
+    "descriptionPlaceholder": "Eine detailliertere Beschreibung hinzufügen...",
+    "historyTitle": "VERLAUF",
+    "initialized": "Erstellt",
+    "lastUpdate": "Zuletzt aktualisiert",
+    "justNow": "Gerade eben"
+  },
+  "taskAttachments": {
+    "title": "Anhänge",
+    "filesCount_one": "{{count}} Datei",
+    "filesCount_other": "{{count}} Dateien",
+    "deleteTooltip": "Anhang löschen",
+    "deleteModalTitle": "Anhang löschen?",
+    "deleteModalMessage": "Möchten Sie „{{name}}“ wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+    "delete": "Löschen",
+    "cancel": "Abbrechen"
+  },
+  "taskChecklist": {
+    "title": "Checkliste",
+    "hide": "Ausblenden",
+    "addItemPlaceholder": "Eintrag hinzufügen...",
+    "add": "Hinzufügen"
+  },
+  "taskComments": {
+    "title": "Diskussion",
+    "placeholder": "Kommentar schreiben...",
+    "sending": "Wird gesendet...",
+    "postComment": "Kommentar posten",
+    "empty": "Noch keine Kommentare. Starte als Erster die Diskussion!",
+    "cancel": "Abbrechen",
+    "saveChanges": "Änderungen speichern",
+    "editTooltip": "Kommentar bearbeiten",
+    "deleteTooltip": "Kommentar löschen",
+    "deleteModalTitle": "Kommentar löschen?",
+    "deleteModalMessage": "Möchten Sie diese Nachricht wirklich entfernen? Diese Aktion ist endgültig.",
+    "delete": "Löschen",
+    "accessDenied": "ZUGRIFF_VERWEIGERT"
+  },
+  "taskSidebar": {
+    "heading": "Zur Aufgabe hinzufügen",
+    "actions": {
+      "members": "Mitglieder",
+      "labels": "Labels",
+      "checklist": "Checkliste",
+      "dates": "Datum",
+      "attachment": "Anhang"
+    },
+    "pastDeadlineError": "Die Frist darf nicht in der Vergangenheit liegen! Bitte wähle ein zukünftiges Datum.",
+    "labelsTitle": "Labels",
+    "deleteGlobalLabelAria": "Globales Label löschen",
+    "createLabelPlaceholder": "Neues Label erstellen...",
+    "createAndAdd": "Erstellen & Hinzufügen",
+    "membersTitle": "Mitglieder",
+    "closeWithoutSaving": "Ohne Speichern schließen",
+    "setDeadline": "Frist festlegen",
+    "selectDate": "Monat & Tag auswählen",
+    "time": "Uhrzeit",
+    "saveDeadline": "Frist speichern",
+    "remove": "Entfernen",
+    "deleteLabelTitle": "Label löschen",
+    "deleteLabelMessage": "Dadurch wird das Label dauerhaft aus dem gesamten Projekt und allen zugehörigen Aufgaben entfernt. Fortfahren?",
+    "confirmDelete": "Löschen bestätigen",
+    "cancel": "Abbrechen"
+  },
+  "footer": {
+    "rights": "Alle Rechte vorbehalten."
+  },
+  "forgotPassword": {
+    "pageTitle": "TrackerApp | Passwort-Wiederherstellung",
+    "title": "Passwort vergessen",
+    "description": "Gib deine E-Mail-Adresse ein, um einen Wiederherstellungslink zu erhalten",
+    "successMessage": "🎉 Falls diese E-Mail-Adresse existiert, wurde ein Link zum Zurücksetzen gesendet!",
+    "submit": "Wiederherstellungslink senden",
+    "emailLabel": "E-Mail",
+    "genericError": "Etwas ist schiefgelaufen",
+    "validation": {
+      "emailInvalid": "Ungültige E-Mail-Adresse",
+      "required": "Pflichtfeld"
+    }
+  },
+  "profile": {
+    "pageTitleLoading": "Wird geladen...",
+    "loadingUser": "Benutzer wird geladen...",
+    "title": "Benutzerprofil",
+    "emailLoginLabel": "E-Mail / Login:",
+    "emailSavedAlert": "E-Mail gespeichert!",
+    "editEmail": "E-Mail bearbeiten",
+    "changeAvatar": "Avatar ändern",
+    "avatarSizeTypeError": "Als Avatar sind nur JPEG- und PNG-Dateien unter 5 MB erlaubt",
+    "updateErrorAlert": "Profil konnte nicht aktualisiert werden",
+    "fields": {
+      "firstName": "Vorname",
+      "lastName": "Nachname",
+      "birthDate": "Geburtsdatum",
+      "city": "Stadt",
+      "phone": "Telefon"
+    },
+    "aboutLabel": "Über mich:",
+    "notSet": "Nicht angegeben",
+    "editProfile": "Profil bearbeiten",
+    "save": "Speichern",
+    "cancel": "Abbrechen"
+  }
+
+  }
