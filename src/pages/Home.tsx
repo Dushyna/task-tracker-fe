@@ -1,8 +1,9 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import {useState} from "react";
+import {Link} from "react-router-dom";
 import List from "../components/List";
 import CardModal from "../components/List/CardModal";
-import { usePageTitle } from "../app/customHooks/usePageTitle.ts";
+import {usePageTitle} from "../app/customHooks/usePageTitle.ts";
+import {useTranslation, Trans} from "react-i18next";
 
 interface Column {
     id: string;
@@ -12,8 +13,9 @@ interface Column {
 
 export default function Home() {
     usePageTitle("TrackerApp");
+    const {t} = useTranslation();
     const [columns, setColumns] = useState<Column[]>([
-        { id: "1", title: "To Do", cards: [] },
+        {id: "1", title: "To Do", cards: []},
     ]);
     const [isAddingList, setIsAddingList] = useState(false);
     const [newListTitle, setNewListTitle] = useState("");
@@ -33,7 +35,7 @@ export default function Home() {
 
     const handleUpdateCards = (columnId: string, cards: Column["cards"]) => {
         setColumns(
-            columns.map((col) => (col.id === columnId ? { ...col, cards } : col))
+            columns.map((col) => (col.id === columnId ? {...col, cards} : col))
         );
     };
 
@@ -41,36 +43,50 @@ export default function Home() {
         <>
             <div className="px-8 pt-6">
                 <h2 className="text-cyan-300 text-2xl font-bold mb-2">
-                    Willkommen bei der Tracker App!
+                    {t("home.welcomeTitle")}
                 </h2>
                 <p className="text-cyan-300/90 text-base mb-4">
-                    Hier auf der Startseite können Sie direkt im Sandbox-Modus testen, wie man Status-Spalten anlegt und Aufgabenkarten erstellt.
+                    {t("home.welcomeSubtitle")}
                 </p>
 
-                <div className="max-w-3xl bg-slate-900/60 backdrop-blur-xl rounded-2xl border border-cyan-400/30 p-5 shadow-[0_0_25px_rgba(6,182,212,0.15)]">
+                <div
+                    className="max-w-3xl bg-slate-900/60 backdrop-blur-xl rounded-2xl border border-cyan-400/30 p-5 shadow-[0_0_25px_rgba(6,182,212,0.15)]">
                     <h3 className="text-cyan-400 font-bold text-lg mb-2">
-                        Demo-Version mit Beispielprojekten testen (ohne Registrierung):
+                        {t("home.demoTitle")}
                     </h3>
                     <p className="text-slate-300 text-sm mb-3">
-                        Möchten Sie realistische Praxisbeispiele (z. B. Hotel Housekeeping, Restaurant-Schichtbetrieb oder IT-Release-Planung) mit Checklisten, Markern und Kommentaren ausprobieren? So geht&apos;s:
+                        {t("home.demoSubtitle")}
                     </p>
                     <ol className="list-decimal list-inside space-y-1.5 text-sm text-cyan-100/90">
                         <li>
-                            Klicken Sie oben rechts auf{" "}
-                            <Link to="/login" className="text-cyan-400 underline hover:text-cyan-300 font-semibold">
-                                Sign in
-                            </Link>{" "}
-                            und wählen Sie <span className="text-cyan-300 font-semibold">„Quick Demo Login“</span>.
+                            <Trans
+                                i18nKey="home.step1"
+                                components={{
+                                    loginLink: (
+                                        <Link
+                                            to="/login"
+                                            className="text-cyan-400 underline hover:text-cyan-300 font-semibold"
+                                        />
+                                    ),
+                                    highlight: <span className="text-cyan-300 font-semibold"/>,
+                                }}
+                            />
                         </li>
                         <li>
-                            Wechseln Sie danach oben im Menü auf den Tab{" "}
-                            <Link to="/projects" className="text-cyan-400 underline hover:text-cyan-300 font-semibold">
-                                Projects
-                            </Link>
-                            , um die vorbereiteten Beispielprojekte zu öffnen.
+                            <Trans
+                                i18nKey="home.step2"
+                                components={{
+                                    projectsLink: (
+                                        <Link
+                                            to="/projects"
+                                            className="text-cyan-400 underline hover:text-cyan-300 font-semibold"
+                                        />
+                                    ),
+                                }}
+                            />
                         </li>
                         <li>
-                            Verschieben Sie Aufgaben per Drag &amp; Drop, bearbeiten Sie Checklisten oder testen Sie die Filterfunktionen.
+                            {t("home.step3")}
                         </li>
                     </ol>
                 </div>
@@ -88,12 +104,13 @@ export default function Home() {
                     />
                 ))}
                 {isAddingList ? (
-                    <div className="w-[300px] bg-slate-900/60 backdrop-blur-xl rounded-2xl border border-cyan-400/30 p-4 shadow-[0_0_30px_rgba(6,182,212,0.2)]">
+                    <div
+                        className="w-[300px] bg-slate-900/60 backdrop-blur-xl rounded-2xl border border-cyan-400/30 p-4 shadow-[0_0_30px_rgba(6,182,212,0.2)]">
                         <input
                             type="text"
                             value={newListTitle}
                             onChange={(e) => setNewListTitle(e.target.value)}
-                            placeholder="Spaltenname eingeben (z. B. In Arbeit)..."
+                            placeholder={t("home.columnPlaceholder")}
                             className="w-full px-4 py-3 bg-white rounded-xl text-slate-800 placeholder:text-slate-400 font-bold border-2 border-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.3)] focus:outline-none transition-all mb-4"
                             autoFocus
                             onKeyDown={(e) => {
@@ -110,7 +127,7 @@ export default function Home() {
                                 onClick={handleAddList}
                                 className="flex-1 px-4 py-2.5 bg-gradient-to-r from-cyan-500 to-cyan-400 text-white text-xs font-black rounded-lg shadow-[0_4px_15px_rgba(6,182,212,0.4)] hover:brightness-110 transition-all uppercase"
                             >
-                                Spalte hinzufügen
+                                {t("home.addColumnBtn")}
                             </button>
                             <button
                                 onClick={() => {
@@ -119,7 +136,7 @@ export default function Home() {
                                 }}
                                 className="px-4 py-2.5 text-slate-400 hover:text-white text-xs font-bold transition-colors"
                             >
-                                Abbrechen
+                                {t("home.cancelBtn")}
                             </button>
                         </div>
                     </div>
@@ -128,12 +145,12 @@ export default function Home() {
                         onClick={() => setIsAddingList(true)}
                         className="w-[300px] h-fit bg-white/5 backdrop-blur-md rounded-2xl border-2 border-dashed border-cyan-400/30 text-cyan-400 hover:bg-cyan-400/10 hover:border-cyan-400 hover:shadow-[0_0_20px_rgba(6,182,212,0.2)] transition-all p-5 text-center font-bold"
                     >
-                        + Spalte hinzufügen (Task-Status)
+                        {t("home.addColumnTrigger")}
                     </button>
                 )}
             </div>
             {selectedCard && (
-                <CardModal card={selectedCard} onClose={() => setSelectedCard(null)} />
+                <CardModal card={selectedCard} onClose={() => setSelectedCard(null)}/>
             )}
         </>
     );

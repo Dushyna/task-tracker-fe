@@ -1,8 +1,9 @@
-import type {Attachment} from '../types';
-import {useAppDispatch} from '../../../app/hooks';
-import {deleteTaskAttachment} from '../slice/tasksSlice';
+import type {Attachment} from "../types";
+import {useAppDispatch} from "../../../app/hooks";
+import {deleteTaskAttachment} from "../slice/tasksSlice";
 import ConfirmModal from "../../../components/ui/ConfirmModal";
 import {useState} from "react";
+import {useTranslation} from "react-i18next";
 
 interface TaskAttachmentsProps {
     taskId: string;
@@ -11,23 +12,25 @@ interface TaskAttachmentsProps {
 
 const getFileIcon = (type: string) => {
     switch (type) {
-        case 'IMAGE':
-            return '🖼️';
-        case 'PDF':
-            return '📄';
-        case 'DOC':
-            return '🟦';
-        case 'LINK':
-            return '🔗';
-        case 'VIDEO':
-            return '🎬';
+        case "IMAGE":
+            return "🖼️";
+        case "PDF":
+            return "📄";
+        case "DOC":
+            return "🟦";
+        case "LINK":
+            return "🔗";
+        case "VIDEO":
+            return "🎬";
         default:
-            return '📎';
+            return "📎";
     }
 };
 
 export const TaskAttachments = ({taskId, attachments}: TaskAttachmentsProps) => {
     const dispatch = useAppDispatch();
+    const {t, i18n} = useTranslation();
+    const locale = i18n.resolvedLanguage === "de" ? "de-DE" : "en-US";
     const [fileToDelete, setFileToDelete] = useState<Attachment | null>(null);
 
     const handleDeleteConfirm = () => {
@@ -37,18 +40,18 @@ export const TaskAttachments = ({taskId, attachments}: TaskAttachmentsProps) => 
         }
     };
     const API_BASE = "/api/v1/attachments/download";
-    const isExternal = (url: string) => url.startsWith('http');
+    const isExternal = (url: string) => url.startsWith("http");
     if (!attachments || attachments.length === 0) return null;
 
     return (
         <div className="space-y-4 pt-6 border-t border-slate-200/60">
             <div className="flex items-center justify-between px-1">
                 <h4 className="text-sm font-black text-cyan-400 uppercase tracking-[0.2em] flex items-center gap-3">
-                    <span className="text-lg">📎</span> Attachments
+                    <span className="text-lg">📎</span> {t("taskAttachments.title")}
                 </h4>
                 <span
                     className="text-[10px] font-bold text-cyan-400 bg-slate-200/50 px-2 py-0.5 rounded-full uppercase">
-                    {attachments.length} files
+                    {t("taskAttachments.filesCount", {count: attachments.length})}
                 </span>
             </div>
 
@@ -68,12 +71,13 @@ export const TaskAttachments = ({taskId, attachments}: TaskAttachmentsProps) => 
                                 href={isExternal(file.url) ? file.url : `${API_BASE}${file.url}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-[11px] font-black text-cyan-400 break-all hover:text-cyan-600 transition-colors underline-offset-2 hover:underline leading-tight pr-4">
+                                className="text-[11px] font-black text-cyan-400 break-all hover:text-cyan-600 transition-colors underline-offset-2 hover:underline leading-tight pr-4"
+                            >
                                 {file.name}
                             </a>
                             <div className="flex items-center gap-2 mt-1">
                                 <span className="text-[9px] text-cyan-400 font-bold uppercase">
-                                    {new Date(file.createdAt).toLocaleDateString()}
+                                    {new Date(file.createdAt).toLocaleDateString(locale)}
                                 </span>
                                 <span className="w-1 h-1 bg-slate-300 rounded-full"/>
                                 <span className="text-[9px] text-cyan-500 font-black uppercase tracking-tighter">
@@ -88,19 +92,21 @@ export const TaskAttachments = ({taskId, attachments}: TaskAttachmentsProps) => 
                                 e.preventDefault();
                                 setFileToDelete(file);
                             }}
-                            aria-label="Delete attachment"
+                            aria-label={t("taskAttachments.deleteTooltip")}
                             className="absolute top-2 right-2 p-1.5 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-lg md:opacity-0 md:group-hover:opacity-100 transition-all z-10"
-                            title="Delete attachment"
+                            title={t("taskAttachments.deleteTooltip")}
                         >
                             ✕
                         </button>
 
                         {fileToDelete && (
                             <ConfirmModal
-                                title="Delete attachment?"
-                                message={`Are you sure you want to delete "${fileToDelete.name}"? This action cannot be undone.`}
-                                confirmText="Delete"
-                                cancelText="Cancel"
+                                title={t("taskAttachments.deleteModalTitle")}
+                                message={t("taskAttachments.deleteModalMessage", {
+                                    name: fileToDelete.name,
+                                })}
+                                confirmText={t("taskAttachments.delete")}
+                                cancelText={t("taskAttachments.cancel")}
                                 onConfirm={handleDeleteConfirm}
                                 onCancel={() => setFileToDelete(null)}
                             />

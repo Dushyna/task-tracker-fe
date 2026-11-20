@@ -3,10 +3,13 @@ import {useAppDispatch, useAppSelector} from "../../app/hooks.ts";
 import {logout, selectIsAuthenticated, selectIsInitialized, selectUser} from "../../features/auth/slice/authSlice.ts";
 import MainButton from "../ui/buttons/MainButton.tsx";
 import {useState} from "react";
+import LanguageSwitcher from "../ui/LanguageSwitcher.tsx";
+import {useTranslation} from "react-i18next";
 
 export default function Header() {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const isAuthenticated = useAppSelector(selectIsAuthenticated);
     const user = useAppSelector(selectUser);
     const isInitialized = useAppSelector(selectIsInitialized);
@@ -62,22 +65,23 @@ export default function Header() {
                             to="/"
                             className="text-sm font-bold text-white hover:text-cyan-400 hover:scale-[1.20] hover:drop-shadow-[0_0_15px_rgba(6,182,212,1)] hover:text-shadow-[0_0_10px_rgba(6,182,212,0.8)] transition-all duration-300 ease-in-out"
                         >
-                            Home
+                        {t("nav.home")}
                         </Link>
                         <Link
                             to="/about"
                             className="text-sm font-bold text-white hover:text-cyan-400 hover:scale-[1.20] hover:drop-shadow-[0_0_15px_rgba(6,182,212,1)] hover:text-shadow-[0_0_10px_rgba(6,182,212,0.8)] transition-all duration-300 ease-in-out"
                         >
-                            About
+                            {t("nav.about")}
                         </Link>
                         <Link
                             to="/projects"
                             className="text-sm font-bold text-white hover:text-cyan-400 hover:scale-[1.20] hover:drop-shadow-[0_0_15px_rgba(6,182,212,1)] hover:text-shadow-[0_0_10px_rgba(6,182,212,0.8)] transition-all duration-300 ease-in-out"
                         >
-                            Projects
+                            {t("nav.projects")}
                         </Link>
 
                         <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-6 w-full md:w-auto md:ml-6">
+                            <LanguageSwitcher />
                             {isInitialized ? (
                                 isAuthenticated ? (
                                     <>
@@ -98,7 +102,7 @@ export default function Header() {
                                             <span>{user?.email}</span>
                                         </Link>
                                         <MainButton onClick={handleLogout}>
-                                            Logout
+                                            {t("nav.logout")}
                                         </MainButton>
                                     </>
                                 ) : (
@@ -107,13 +111,13 @@ export default function Header() {
                                             to="/register"
                                             className="text-sm font-bold text-white hover:text-cyan-400 hover:scale-[1.35] hover:drop-shadow-[0_0_15px_rgba(6,182,212,1)] hover:text-shadow-[0_0_10px_rgba(6,182,212,0.8)] transition-all duration-300 ease-in-out"
                                         >
-                                            Sign up
+                                            {t("nav.signUp")}
                                         </Link>
                                         <Link
                                             to="/login"
                                             className="rounded-xl bg-cyan-500 border border-cyan-300/50 px-6 py-2.5 text-sm font-black text-white shadow-[0_0_20px_rgba(6,182,212,0.6)] hover:scale-[1.35] hover:bg-cyan-400 hover:shadow-[0_0_35px_rgba(6,182,212,0.9)] hover:text-shadow-[0_0_10px_rgba(255,255,255,0.8)] transition-all duration-300 ease-in-out"
                                         >
-                                            Sign in
+                                            {t("nav.signIn")}
                                         </Link>
                                     </>
                                 )

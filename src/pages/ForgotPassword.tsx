@@ -1,17 +1,19 @@
 import * as Yup from "yup";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { fetchForgotPassword } from "../features/auth/services/api.ts";
+import {useState} from "react";
+import {useNavigate} from "react-router-dom";
+import {fetchForgotPassword} from "../features/auth/services/api.ts";
 import DynamicForm from "../components/ui/DynamicForm";
-import type { FieldConfig } from "../components/ui/types";
+import type {FieldConfig} from "../components/ui/types";
 import {usePageTitle} from "../app/customHooks/usePageTitle.ts";
+import {useTranslation} from "react-i18next";
 
 const initialValues = {
     email: "",
 };
 
 const ForgotPasswordPage = () => {
-    usePageTitle("TrackerApp | Password recovery");
+    const {t} = useTranslation();
+    usePageTitle(t("forgotPassword.pageTitle"));
     const navigate = useNavigate();
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -19,27 +21,26 @@ const ForgotPasswordPage = () => {
     const fields: FieldConfig[] = [
         {
             name: "email",
-            label: "Email",
+            label: t("forgotPassword.emailLabel"),
             type: "email",
-            placeholder: "you@example.com"
-        }
+            placeholder: "you@example.com",
+        },
     ];
 
     const validationSchema = Yup.object({
-        email: Yup.string().email("Invalid email address").required("Required"),
+        email: Yup.string()
+            .email(t("forgotPassword.validation.emailInvalid"))
+            .required(t("forgotPassword.validation.required")),
     });
-
 
     const handleSubmit = async (values: typeof initialValues) => {
         setError(null);
         setSuccessMessage(null);
         try {
             await fetchForgotPassword(values.email);
-            setSuccessMessage(
-                "🎉 If this email exists, a reset link has been sent!"
-            );
+            setSuccessMessage(t("forgotPassword.successMessage"));
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Something went wrong");
+            setError(err instanceof Error ? err.message : t("forgotPassword.genericError"));
         }
     };
 
@@ -47,14 +48,14 @@ const ForgotPasswordPage = () => {
         <div className="min-h-screen flex items-start justify-center bg-slate-950 p-4">
             <div className="w-full max-w-md">
                 <DynamicForm
-                    title="Forgot Password"
-                    description={successMessage || "Enter your email to receive a recovery link"}
+                    title={t("forgotPassword.title")}
+                    description={successMessage || t("forgotPassword.description")}
                     fields={fields}
                     initialValues={initialValues}
                     validationSchema={validationSchema}
                     onSubmit={handleSubmit}
                     onClose={() => navigate("/login")}
-                    submitText="Send Recovery Link"
+                    submitText={t("forgotPassword.submit")}
                     errorMessage={error || undefined}
                 />
             </div>

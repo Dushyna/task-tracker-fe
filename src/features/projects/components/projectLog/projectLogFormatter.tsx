@@ -1,3 +1,4 @@
+import i18n from "i18next";
 import type {ProjectLogAction} from "../../types";
 
 export const getLogMessage = (
@@ -11,6 +12,10 @@ export const getLogMessage = (
 ) => {
     const fullName = [userFirstName, userLastName].filter(Boolean).join(" ");
     const displayUser = fullName ? `${fullName} (${userEmail})` : userEmail;
+    const translatedEntity =
+        entity === "Task"
+            ? i18n.t("projectLogs.entities.task")
+            : i18n.t("projectLogs.entities.status");
 
     let verb = "";
     let restText = "";
@@ -18,51 +23,74 @@ export const getLogMessage = (
 
     switch (action) {
         case "CREATE":
-            verb = "created";
+            verb = i18n.t("projectLogs.verbs.created");
             verbColor = "text-green-500";
-            restText = ` ${entity.toLowerCase()}: ${entityName} ${formatCreateDeleteDiff(difference)}`;
+            restText = ` ${i18n.t("projectLogs.createDeleteRest", {
+                entity: translatedEntity,
+                name: entityName,
+                diff: formatCreateDeleteDiff(difference),
+            })}`.trimEnd();
             break;
 
         case "DELETE":
-            verb = "deleted";
+            verb = i18n.t("projectLogs.verbs.deleted");
             verbColor = "text-red-500";
-            restText = ` ${entity.toLowerCase()}: ${entityName} ${formatCreateDeleteDiff(difference)}`;
+            restText = ` ${i18n.t("projectLogs.createDeleteRest", {
+                entity: translatedEntity,
+                name: entityName,
+                diff: formatCreateDeleteDiff(difference),
+            })}`.trimEnd();
             break;
 
         case "MOVE":
-            verb = "moved";
+            verb = i18n.t("projectLogs.verbs.moved");
             verbColor = "text-purple-500";
-            restText = ` ${entity.toLowerCase()}: ${entityName}. ${formatMoveDiff(difference)}.`;
+            restText = ` ${i18n.t("projectLogs.moveRest", {
+                entity: translatedEntity,
+                name: entityName,
+                diff: formatMoveDiff(difference),
+            })}`;
             break;
 
         case "MARKERS":
             if (difference?.startsWith("markerAdded=")) {
-                verb = "added";
+                verb = i18n.t("projectLogs.verbs.added");
                 verbColor = "text-green-500";
             } else if (difference?.startsWith("markerRemoved=")) {
-                verb = "removed";
+                verb = i18n.t("projectLogs.verbs.removed");
                 verbColor = "text-red-500";
             }
-            restText = ` marker: ${difference?.replace(/markerAdded=|markerRemoved=/, "")} on ${entity.toLowerCase()}: ${entityName}.`;
+            restText = ` ${i18n.t("projectLogs.markerRest", {
+                marker: difference?.replace(/markerAdded=|markerRemoved=/, "") ?? "",
+                entity: translatedEntity,
+                name: entityName,
+            })}`;
             break;
 
         case "TITLE":
-            verb = "changed";
+            verb = i18n.t("projectLogs.verbs.changed");
             verbColor = "text-yellow-400";
-            restText = ` title on ${entity.toLowerCase()}: ${formatTitleDiff(difference)}.`;
+            restText = ` ${i18n.t("projectLogs.titleRest", {
+                entity: translatedEntity,
+                diff: formatTitleDiff(difference),
+            })}`;
             break;
 
         case "DESCRIPTION":
-            verb = "changed";
+            verb = i18n.t("projectLogs.verbs.changed");
             verbColor = "text-yellow-400";
-            restText = ` description on ${entity.toLowerCase()}: ${entityName}. ${formatDescriptionDiff(difference)}.`;
+            restText = ` ${i18n.t("projectLogs.descriptionRest", {
+                entity: translatedEntity,
+                name: entityName,
+                diff: formatDescriptionDiff(difference),
+            })}`;
             break;
 
         case "DUE_DATE":
             return (
                 <>
                     <span className="font-medium">{displayUser}</span>{" "}
-                    {formatDueDateDiff(difference, entity, entityName)}
+                    {formatDueDateDiff(difference, translatedEntity, entityName)}
                 </>
             );
 
@@ -82,7 +110,8 @@ export const getLogMessage = (
 
 function formatDate(iso: string) {
     const date = new Date(iso);
-    return date.toLocaleString(undefined, {
+    const locale = i18n.resolvedLanguage === "de" ? "de-DE" : "en-US";
+    return date.toLocaleString(locale, {
         year: "numeric",
         month: "short",
         day: "numeric",
@@ -95,33 +124,38 @@ function formatMoveDiff(diff?: string) {
     if (!diff) return "";
     const from = diff.match(/fromStatus=([^,]+)/)?.[1] ?? "";
     const to = diff.match(/toStatus=(.+)/)?.[1] ?? "";
-    return `From: ${from} to: ${to}`;
+    return i18n.t("projectLogs.fromTo", {from, to});
 }
 
 function formatTitleDiff(diff?: string) {
     if (!diff) return "";
     const oldTitle = diff.match(/oldTitle=([^,]+)/)?.[1] ?? "";
     const newTitle = diff.match(/newTitle=([^,]+)/)?.[1] ?? "";
-    return `${oldTitle}. From: "${oldTitle}" to: "${newTitle}"`;
+    return i18n.t("projectLogs.titleDiff", {oldTitle, newTitle});
 }
 
 function formatDescriptionDiff(diff?: string) {
     if (!diff) return "";
     const oldDesc = diff.match(/oldDescription=([^,]+)/)?.[1] ?? "";
     const newDesc = diff.match(/newDescription=([^,]+)/)?.[1] ?? "";
-    return `From "${oldDesc}" to "${newDesc}"`;
+    return i18n.t("projectLogs.descriptionDiff", {oldDesc, newDesc});
 }
 
-function formatDueDateDiff(diff?: string, entity?: string, entityName?: string) {
+function formatDueDateDiff(diff?: string, translatedEntity?: string, entityName?: string) {
     if (!diff) return null;
 
     if (diff.startsWith("dueDateAdded=")) {
         const dateStr = diff.replace("dueDateAdded=", "");
         return (
             <>
-                <span className="text-green-500 font-semibold">set</span>
+                <span className="text-green-500 font-semibold">{i18n.t("projectLogs.verbs.set")}</span>
                 <span className="text-cyan-300">
-                    {" "}deadline on {entity?.toLowerCase()}: {entityName} to: {formatDate(dateStr)}.
+                    {" "}
+                    {i18n.t("projectLogs.deadlineAdded", {
+                        entity: translatedEntity,
+                        name: entityName,
+                        date: formatDate(dateStr),
+                    })}
                 </span>
             </>
         );
@@ -131,9 +165,14 @@ function formatDueDateDiff(diff?: string, entity?: string, entityName?: string) 
         const dateStr = diff.replace("dueDateRemoved=", "");
         return (
             <>
-                <span className="text-red-500 font-semibold">removed</span>
+                <span className="text-red-500 font-semibold">{i18n.t("projectLogs.verbs.removed")}</span>
                 <span className="text-cyan-300">
-                    {" "}deadline on {entity?.toLowerCase()}: {entityName}. (Deadline was: {formatDate(dateStr)}).
+                    {" "}
+                    {i18n.t("projectLogs.deadlineRemoved", {
+                        entity: translatedEntity,
+                        name: entityName,
+                        date: formatDate(dateStr),
+                    })}
                 </span>
             </>
         );
@@ -143,9 +182,15 @@ function formatDueDateDiff(diff?: string, entity?: string, entityName?: string) 
         const [from, to] = diff.replace("dueDateChanged=", "").split("->");
         return (
             <>
-                <span className="text-yellow-400 font-semibold">changed</span>
+                <span className="text-yellow-400 font-semibold">{i18n.t("projectLogs.verbs.changed")}</span>
                 <span className="text-cyan-300">
-                    {" "}deadline on {entity?.toLowerCase()}: {entityName}. From: {formatDate(from)} to: {formatDate(to)}.
+                    {" "}
+                    {i18n.t("projectLogs.deadlineChanged", {
+                        entity: translatedEntity,
+                        name: entityName,
+                        from: formatDate(from),
+                        to: formatDate(to),
+                    })}
                 </span>
             </>
         );
@@ -159,7 +204,7 @@ function formatCreateDeleteDiff(diff?: string) {
 
     if (diff.startsWith("createdIn=") || diff.startsWith("deletedFrom=")) {
         const status = diff.split("=")[1];
-        return `in status: ${status}.`;
+        return i18n.t("projectLogs.inStatus", {status});
     }
 
     return "";

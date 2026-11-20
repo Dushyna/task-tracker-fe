@@ -1,7 +1,8 @@
 import { createPortal } from "react-dom";
 import * as Yup from "yup";
 import DynamicForm from "../../../components/ui/DynamicForm";
-import type {EditProjectDto} from "../types";
+import type { EditProjectDto } from "../types";
+import { useTranslation } from "react-i18next";
 
 type ProjectEditModalProps = {
     project: EditProjectDto;
@@ -13,17 +14,6 @@ type ProjectEditModalProps = {
 
 const NAME_REGEX = /^[A-Z][a-zA-Z0-9 ]{2,49}$/;
 
-const validationSchema = Yup.object({
-    title: Yup.string()
-        .required("Title is required")
-        .matches(
-            NAME_REGEX,
-            "Project title should be at least 3 to 50   characters long and start with a capital letter. Special characters cannot be used"
-        ),
-    description: Yup.string()
-        .required("Description is required"),
-});
-
 export default function ProjectEditModal({
                                              project,
                                              onClose,
@@ -31,22 +21,33 @@ export default function ProjectEditModal({
                                              isLoading,
                                              errorMessage,
                                          }: ProjectEditModalProps) {
+    const { t } = useTranslation();
+
+    const validationSchema = Yup.object({
+        title: Yup.string()
+            .required(t("projectEditModal.validation.titleRequired"))
+            .matches(NAME_REGEX, t("projectEditModal.validation.titleInvalid")),
+        description: Yup.string().required(
+            t("projectEditModal.validation.descriptionRequired")
+        ),
+    });
+
     return createPortal(
-        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/50">
+        <div className="fixed inset-0 z- flex items-center justify-center bg-black/50">
             <DynamicForm
-                title="Edit Project"
-                description="Update project details"
+                title={t("projectEditModal.title")}
+                description={t("projectEditModal.description")}
                 fields={[
                     {
                         name: "title",
-                        label: "Project Title",
-                        placeholder: "Enter project title",
+                        label: t("projectEditModal.titleLabel"),
+                        placeholder: t("projectEditModal.titlePlaceholder"),
                     },
                     {
                         name: "description",
-                        label: "Project Description",
+                        label: t("projectEditModal.descriptionLabel"),
                         type: "textarea",
-                        placeholder: "Enter project description",
+                        placeholder: t("projectEditModal.descriptionPlaceholder"),
                         rows: 4,
                     },
                 ]}
@@ -57,7 +58,7 @@ export default function ProjectEditModal({
                 validationSchema={validationSchema}
                 onSubmit={onSubmit}
                 onClose={onClose}
-                submitText="Save Changes"
+                submitText={t("projectEditModal.submit")}
                 isLoading={isLoading}
                 errorMessage={errorMessage}
             />
