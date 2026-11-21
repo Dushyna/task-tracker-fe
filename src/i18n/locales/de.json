@@ -459,6 +459,27 @@
     "editProfile": "Profil bearbeiten",
     "save": "Speichern",
     "cancel": "Abbrechen"
+  },
+  "errors": {
+    "internalServer": "Interner Serverfehler",
+    "resetPassword": "Passwort konnte nicht zurückgesetzt werden",
+    "emailAlreadyRegistered": "Ein Benutzer mit dieser E-Mail-Adresse ist bereits registriert.",
+    "registrationFailed": "Fehler bei der Registrierung",
+    "updateProject": "Projekt konnte nicht aktualisiert werden",
+    "inviteUser": "Benutzer konnte nicht eingeladen werden",
+    "fetchProjectLogs": "Projektprotokolle konnten nicht geladen werden",
+    "deleteProject": "Projekt konnte nicht gelöscht werden",
+    "fetchTaskStatuses": "Aufgabenstatus konnten nicht geladen werden.",
+    "deleteTaskStatus": "Aufgabenstatus konnte nicht gelöscht werden.",
+    "updateTaskStatusesOrder": "Reihenfolge der Aufgabenstatus konnte nicht aktualisiert werden.",
+    "fetchComments": "Kommentare konnten nicht geladen werden",
+    "addComment": "Kommentar konnte nicht hinzugefügt werden",
+    "deleteFailed": "Löschen fehlgeschlagen",
+    "forbidden": "Zugriff verweigert",
+    "fetchUserDetails": "Benutzerdaten konnten nicht geladen werden",
+    "updateUserDetails": "Benutzerdaten konnten nicht aktualisiert werden",
+    "updateAvatar": "Avatar konnte auf dem Server nicht aktualisiert werden",
+    "updateEmail": "E-Mail-Adresse konnte nicht aktualisiert werden"
   }
 
   }

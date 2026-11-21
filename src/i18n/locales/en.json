@@ -459,6 +459,27 @@
     "editProfile": "Edit Profile",
     "save": "Save",
     "cancel": "Cancel"
+  },
+  "errors": {
+    "internalServer": "Internal Server Error",
+    "resetPassword": "Reset password failed",
+    "emailAlreadyRegistered": "A user with this email is already registered.",
+    "registrationFailed": "Error during registration",
+    "updateProject": "Failed to update project",
+    "inviteUser": "Failed to invite user",
+    "fetchProjectLogs": "Failed to fetch project logs",
+    "deleteProject": "Failed to delete project",
+    "fetchTaskStatuses": "Failed to fetch task statuses.",
+    "deleteTaskStatus": "Failed to delete task status.",
+    "updateTaskStatusesOrder": "Failed to update task statuses order.",
+    "fetchComments": "Failed to fetch comments",
+    "addComment": "Failed to add comment",
+    "deleteFailed": "Failed to delete",
+    "forbidden": "Forbidden",
+    "fetchUserDetails": "Failed to fetch user details",
+    "updateUserDetails": "Failed to update user details",
+    "updateAvatar": "Failed to update avatar on server",
+    "updateEmail": "Failed to update email"
   }
 
 

@@ -2,7 +2,7 @@ import {usePageTitle} from "../app/customHooks/usePageTitle.ts";
 import {useAppDispatch, useAppSelector} from "../app/hooks.ts";
 import React, {type Dispatch, type SetStateAction, useEffect, useState} from "react";
 import {
-    AVATAR_UPDATE_ERROR,
+    getAvatarUpdateError,
     getUserDetails,
     selectUserData,
     setUserDetails,
@@ -107,7 +107,7 @@ export default function Profile() {
             if (input) input.value = "";
 
         } catch (error: unknown) {
-            setErrorMessage(typeof error === "string" ? error : AVATAR_UPDATE_ERROR);
+            setErrorMessage(typeof error === "string" ? error : getAvatarUpdateError());
         }
     };
 

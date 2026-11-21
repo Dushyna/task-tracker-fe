@@ -5,11 +5,6 @@ import type {CreateProjectDto, InviteRequestDto, Project, ProjectLog} from "../t
 
 const PROJECTS_BASE_PATH = "/projects";
 
-export const fetchProjects = async (): Promise<Project[]> => {
-    const res = await axiosInstance.get(PROJECTS_BASE_PATH);
-    return res.data;
-};
-
 export const fetchMyProjects = async (): Promise<Project[]> => {
     const res = await axiosInstance.get(`${PROJECTS_BASE_PATH}/my`);
     return res.data;

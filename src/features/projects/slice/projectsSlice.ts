@@ -5,10 +5,10 @@ import { isAxiosError, type AxiosError } from "axios";
 import {createSelector, type PayloadAction} from "@reduxjs/toolkit";
 import type {MarkerDto} from "../../tasks/types";
 import {fetchProjectLogs} from "../services/api";
+import i18n from "i18next";
 
 const initialState: ProjectsSliceState = {
     projects: [],
-    adminProjects: [],
     currentProject: null,
     isLoading: false,
     isUpdatingProject: false,
@@ -19,30 +19,6 @@ export const projectsSlice = createAppSlice({
     name: "projects",
     initialState,
     reducers: (create) => ({
-        getAllProjects: create.asyncThunk(
-            async () => {
-                return api
-                    .fetchProjects()
-                    .catch((err: AxiosError<{ message: string }>) => {
-                        throw new Error(err.response?.data?.message);
-                    });
-            },
-            {
-                pending: (state) => {
-                    state.isLoading = true;
-                },
-                fulfilled: (state, action) => {
-                    state.isLoading = false;
-                    state.adminProjects = action.payload;
-                },
-                rejected: (state, action) => {
-                    state.isLoading = false;
-                    state.adminProjects = [];
-                    console.log(action.error);
-                },
-            }
-        ),
-
         getMyProjects: create.asyncThunk(
             async () => {
                 return api
@@ -71,7 +47,7 @@ export const projectsSlice = createAppSlice({
                 return api.fetchCreateProject(dto).catch((err) => {
                     if (isAxiosError(err)) {
                         throw new Error(
-                            err.response?.data?.message || "Internal Server Error"
+                            err.response?.data?.message || i18n.t("errors.internalServer")
                         );
                     }
                 });
@@ -98,7 +74,7 @@ export const projectsSlice = createAppSlice({
                     return await api.fetchUpdateProject(id, dto);
                 } catch (err) {
                     if (isAxiosError(err)) {
-                        throw new Error(err.response?.data?.message || "Failed to update project");
+                        throw new Error(err.response?.data?.message || i18n.t("errors.updateProject"));
                     }
                     throw err;
                 }
@@ -165,7 +141,7 @@ export const projectsSlice = createAppSlice({
                     return await api.fetchInviteUser(id, dto);
                 } catch (err) {
                     if (isAxiosError(err)) {
-                        throw new Error(err.response?.data?.message || "Failed to invite user");
+                        throw new Error(err.response?.data?.message || i18n.t("errors.inviteUser"));
                     }
                     throw err;
                 }
@@ -238,7 +214,7 @@ export const projectsSlice = createAppSlice({
             async (projectId: string): Promise<ProjectLog[]> => {
                 return fetchProjectLogs(projectId).catch((error) => {
                     if (isAxiosError(error)) {
-                        throw new Error(error.response?.data?.message || "Failed to fetch project logs");
+                        throw new Error(error.response?.data?.message || i18n.t("errors.fetchProjectLogs"));
                     }
                     throw error;
                 });
@@ -267,7 +243,7 @@ export const projectsSlice = createAppSlice({
                     return id;
                 } catch (err) {
                     if (isAxiosError(err)) {
-                        throw new Error(err.response?.data?.message || "Failed to delete project");
+                        throw new Error(err.response?.data?.message || i18n.t("errors.deleteProject"));
                     }
                     throw err;
                 }
@@ -299,9 +275,7 @@ export const projectsSlice = createAppSlice({
     // state as their first argument.
     selectors: {
         selectProjects: (state) => state.projects,
-        selectAdminProjects: (state) => state.adminProjects,
         selectCurrentProject: state => state.currentProject,
-        selectIsLoading: (state) => state.isLoading,
         selectCreateProjectErrorMessage: (state) => state.createProjectErrorMessage,
         selectUpdateProjectErrorMessage: (state) => state.updateProjectErrorMessage,
         selectDeleteProjectErrorMessage: (state) => state.deleteProjectErrorMessage,
@@ -315,15 +289,13 @@ export const projectsSlice = createAppSlice({
 });
 
 // // Action creators are generated for each case reducer function.
-export const { createProject, updateProject, getAllProjects,getMyProjects, getProjectById, inviteUser,
+export const { createProject, updateProject, getMyProjects, getProjectById, inviteUser,
     addMarkerToCurrentProject, removeMarkerFromProject,
     deleteProject, getProjectLogs,clearDeleteError } = projectsSlice.actions;
 
 // Selectors returned by `slice.selectors` take the root state as their first argument.
 export const {
     selectProjects,
-    selectAdminProjects,
-    selectIsLoading,
     selectCurrentProject,
     selectCreateProjectErrorMessage,
     selectUpdateProjectErrorMessage,

@@ -1,6 +1,7 @@
 import axiosInstance from "../../../lib/axiosInstance";
 import type {Credentials, UserCreateResponseDto, UserRegistrationDto, UserResponseDto} from "../types";
 import axios from "axios";
+import i18n from "i18next";
 
 // we already added  prefix /api in axios config
 
@@ -23,26 +24,26 @@ interface ApiError extends Error {
     };
 }
 
-export const fetchLogin = async (credentials: Credentials):Promise<void> => {
-  await axiosInstance.post(LOGIN_PATH, credentials);
+export const fetchLogin = async (credentials: Credentials): Promise<void> => {
+    await axiosInstance.post(LOGIN_PATH, credentials);
 };
 
-export const fetchLogout = async ():Promise<void> => {
+export const fetchLogout = async (): Promise<void> => {
     await axiosInstance.post(LOGOUT_PATH);
 };
 
-export const fetchRegister = async (dto: UserRegistrationDto):Promise<UserCreateResponseDto> => {
-  const res = await axiosInstance.post(REGISTER_PATH, dto);
-  return res.data;
+export const fetchRegister = async (dto: UserRegistrationDto): Promise<UserCreateResponseDto> => {
+    const res = await axiosInstance.post(REGISTER_PATH, dto);
+    return res.data;
 };
 
-export const fetchCurrentUser = async ():Promise<UserResponseDto> => {
+export const fetchCurrentUser = async (): Promise<UserResponseDto> => {
     const res = await axiosInstance.get(GET_CURRENT_USER_PATH);
     return res.data;
 };
 
 export const fetchForgotPassword = async (email: string) => {
-    await axiosInstance.post("/auth/forgot-password", { email });
+    await axiosInstance.post("/auth/forgot-password", {email});
 };
 
 export const fetchResetPassword = async (data: ResetPasswordData) => {
@@ -50,11 +51,11 @@ export const fetchResetPassword = async (data: ResetPasswordData) => {
         await axiosInstance.post("/auth/reset-password", data);
     } catch (err) {
         const error = err as ApiError;
-        const message = error.response?.data?.message ?? "Reset password failed";
+        const message = error.response?.data?.message ?? i18n.t("errors.resetPassword");
         throw new Error(message);
     }
 };
 
-export const fetchRefreshToken = async ():Promise<void> => {
+export const fetchRefreshToken = async (): Promise<void> => {
     await axios.post(TOKEN_REFRESH_PATH, {}, {withCredentials: true});
 };
