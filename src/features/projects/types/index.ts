@@ -29,7 +29,6 @@ export interface EmployeeDto {
 
 export interface ProjectsSliceState {
     projects: Project[];
-    adminProjects: Project[],
     currentProject?: Project | null;
     createProjectErrorMessage?: string;
     inviteUserErrorMessage?: string;

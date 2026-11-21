@@ -3,6 +3,7 @@ import type {AuthSliceState, Credentials, UserRegistrationDto, UserResponseDto} 
 import * as api from "../services/api";
 import {isAxiosError} from "axios";
 import type {PayloadAction} from "@reduxjs/toolkit";
+import i18n from "i18next";
 
 const initialState: AuthSliceState = {
     isAuthenticated: false,
@@ -21,7 +22,7 @@ export const authSlice = createAppSlice({
                 return api.fetchLogin(credentials).catch((err) => {
                     if (isAxiosError(err)) {
                         throw new Error(
-                            err.response?.data?.message || "Internal Server Error"
+                            err.response?.data?.message || i18n.t("errors.internalServer")
                         );
                     }
                     throw err;
@@ -68,9 +69,9 @@ export const authSlice = createAppSlice({
                 } catch (err) {
                     if (isAxiosError(err)) {
                         if (err.response?.status === 409) {
-                            throw new Error("A user with this email is already registered.");
+                            throw new Error(i18n.t("errors.emailAlreadyRegistered"));
                         }
-                        throw new Error(err.response?.data?.message || "Error during registration");
+                        throw new Error(err.response?.data?.message || i18n.t("errors.registrationFailed"));
                     }
                     throw err;
                 }

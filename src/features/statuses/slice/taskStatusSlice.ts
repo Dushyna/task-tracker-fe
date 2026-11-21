@@ -5,6 +5,7 @@ import {isAxiosError, type AxiosError} from "axios";
 import { createSelector } from '@reduxjs/toolkit';
 import type { RootState } from '../../../app/store';
 import { mapTaskStatusFromApi } from "../mapper/mapper.ts";
+import i18n from "i18next";
 
 const initialState: TaskStatusSliceState = {
     taskStatuses: [],
@@ -21,7 +22,7 @@ export const taskStatusSlice = createAppSlice({
                 return api
                     .fetchTaskStatuses(id)
                     .catch((err: AxiosError<{ message: string }>) => {
-                        throw new Error(err.response?.data?.message || "Failed to fetch task statuses.");
+                        throw new Error(err.response?.data?.message || i18n.t("errors.fetchTaskStatuses"));
                     });
             },
             {
@@ -45,7 +46,7 @@ export const taskStatusSlice = createAppSlice({
                 return api.fetchCreateTaskStatus(dto).catch((err) => {
                     if (isAxiosError(err)) {
                         throw new Error(
-                            err.response?.data?.message || "Internal Server Error"
+                            err.response?.data?.message || i18n.t("errors.internalServer")
                         );
                     }
                     throw err;
@@ -74,7 +75,7 @@ export const taskStatusSlice = createAppSlice({
                 return api.fetchUpdateTaskStatus(dto).catch((err) => {
                     if (isAxiosError(err)) {
                         throw new Error(
-                            err.response?.data?.message || "Internal Server Error"
+                            err.response?.data?.message || i18n.t("errors.internalServer")
                         );
                     }
                     throw err;
@@ -105,7 +106,7 @@ export const taskStatusSlice = createAppSlice({
             async (id: string) => {
                 return api.fetchDeleteTaskStatus(id).catch((err) => {
                     if (isAxiosError(err)) {
-                        throw new Error(err.response?.data?.message || "Failed to delete task status.");
+                        throw new Error(err.response?.data?.message || i18n.t("errors.deleteTaskStatus"));
                     }
                     throw err;
                 }).then(() => id);
@@ -128,7 +129,7 @@ export const taskStatusSlice = createAppSlice({
             async (newOrder: TaskStatus[]) => {
                 return api.fetchUpdateTaskStatusesOrder(newOrder).catch((err) => {
                     if (isAxiosError(err)) {
-                        throw new Error(err.response?.data?.message || "Failed to update task statuses order.");
+                        throw new Error(err.response?.data?.message || i18n.t("errors.updateTaskStatusesOrder"));
                     }
                     throw err;
                 });

@@ -12,6 +12,7 @@ import * as api from "../services/api";
 import {isAxiosError, type AxiosError} from "axios";
 import {mapTaskFromApi} from "../mapper/mapper.ts";
 import {current, isDraft, type PayloadAction} from "@reduxjs/toolkit";
+import i18n from "i18next";
 
 const initialState: TasksSliceState = {
     tasks: [],
@@ -91,7 +92,7 @@ export const tasksSlice = createAppSlice({
                     return api.fetchCreateTask(dto).catch((err) => {
                         if (isAxiosError(err)) {
                             throw new Error(
-                                err.response?.data?.message || "Internal Server Error"
+                                err.response?.data?.message || i18n.t("errors.internalServer")
                             );
                         }
                         throw err;
@@ -121,7 +122,7 @@ export const tasksSlice = createAppSlice({
                     return api.fetchUpdateTask(id, dto).catch((err) => {
                         if (isAxiosError(err)) {
                             throw new Error(
-                                err.response?.data?.message || "Internal Server Error"
+                                err.response?.data?.message || i18n.t("errors.internalServer")
                             );
                         }
                         throw err;
@@ -292,7 +293,7 @@ export const tasksSlice = createAppSlice({
                 async (taskId: string) => {
                     return api.fetchComments(taskId).catch((err) => {
                         if (isAxiosError(err)) {
-                            throw new Error(err.response?.data?.message || "Failed to fetch comments");
+                            throw new Error(err.response?.data?.message || i18n.t("errors.fetchComments"));
                         }
                         throw err;
                     });
@@ -314,7 +315,7 @@ export const tasksSlice = createAppSlice({
                 async ({taskId, text}: { taskId: string, text: string }) => {
                     return api.fetchAddComment(taskId, text).catch((err) => {
                         if (isAxiosError(err)) {
-                            throw new Error(err.response?.data?.message || "Failed to add comment");
+                            throw new Error(err.response?.data?.message || i18n.t("errors.addComment"));
                         }
                         throw err;
                     });
@@ -336,7 +337,7 @@ export const tasksSlice = createAppSlice({
                         return commentId;
                     } catch (err) {
                         if (isAxiosError(err)) {
-                            throw new Error(err.response?.data?.message || "Failed to delete");
+                            throw new Error(err.response?.data?.message || i18n.t("errors.deleteFailed"));
                         }
                         throw err;
                     }
@@ -362,7 +363,7 @@ export const tasksSlice = createAppSlice({
                         return await api.fetchUpdateComment(taskId, commentId, text);
                     } catch (err) {
                         if (isAxiosError(err)) {
-                            throw new Error(err.response?.data?.message || "Forbidden");
+                            throw new Error(err.response?.data?.message || i18n.t("errors.forbidden"));
                         }
                         throw err;
                     }
