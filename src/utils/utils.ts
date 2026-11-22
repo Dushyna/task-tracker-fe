@@ -1,4 +1,4 @@
-import type { FormikErrors } from "formik";
+import type {FormikErrors} from "formik";
 
 export const getErrorMessage = <T extends Record<string, unknown>>(
     error: string | string[] | FormikErrors<T> | FormikErrors<T>[] | undefined
@@ -10,8 +10,5 @@ export const getErrorMessage = <T extends Record<string, unknown>>(
             .map((e) => (typeof e === "string" ? e : JSON.stringify(e)))
             .join(", ");
     }
-    if (typeof error === "object") {
-        return JSON.stringify(error);
-    }
-    return "Invalid value";
+    return JSON.stringify(error);
 };

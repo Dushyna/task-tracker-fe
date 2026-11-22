@@ -1,9 +1,9 @@
-import type { UpdateUserPayloadDto, UserSliceState, UserDetailedDto } from "../types";
+import type {UpdateUserPayloadDto, UserSliceState, UserDetailedDto} from "../types";
 import * as api from "../services/api";
-import { createAppSlice } from "../../../app/createAppSlice.ts";
-import { isAxiosError } from "axios";
-import { isPending, isRejected, type PayloadAction } from "@reduxjs/toolkit";
+import {createAppSlice} from "../../../app/createAppSlice.ts";
+import {isPending, isRejected, type PayloadAction} from "@reduxjs/toolkit";
 import i18n from "i18next";
+import {getLocalizedApiError, throwLocalizedAxiosError} from "../../../utils/apiErrorHandler";
 
 const initialState: UserSliceState = {
     data: null,
@@ -12,13 +12,6 @@ const initialState: UserSliceState = {
 };
 
 export const getAvatarUpdateError = () => i18n.t("errors.updateAvatar");
-
-const throwLocalizedAxiosError = (err: unknown, fallbackKey: string): never => {
-    if (isAxiosError(err)) {
-        throw new Error(err.response?.data?.message || i18n.t(fallbackKey));
-    }
-    throw err;
-};
 
 export const userSlice = createAppSlice({
     name: "user",
@@ -57,14 +50,11 @@ export const userSlice = createAppSlice({
         ),
 
         updateUserAvatar: create.asyncThunk(
-            async (formData: FormData, { rejectWithValue }) => {
+            async (formData: FormData, {rejectWithValue}) => {
                 try {
                     return await api.fetchUpdateUserAvatar(formData);
                 } catch (err) {
-                    if (isAxiosError(err)) {
-                        return rejectWithValue(err.response?.data?.message || getAvatarUpdateError());
-                    }
-                    return rejectWithValue(getAvatarUpdateError());
+                    return rejectWithValue(getLocalizedApiError(err, "errors.updateAvatar"));
                 }
             },
             {
@@ -80,7 +70,7 @@ export const userSlice = createAppSlice({
         ),
 
         setUserDetails: create.reducer((state, action: PayloadAction<UserDetailedDto | undefined>) => {
-            state.data = action.payload ? { ...action.payload } : null;
+            state.data = action.payload ? {...action.payload} : null;
         }),
     }),
     extraReducers: (builder) => {
@@ -106,4 +96,4 @@ export const {
     updateUserAvatar,
 } = userSlice.actions;
 
-export const { selectUserData } = userSlice.selectors;
+export const {selectUserData} = userSlice.selectors;

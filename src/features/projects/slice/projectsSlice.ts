@@ -1,11 +1,10 @@
-import { createAppSlice } from "../../../app/createAppSlice";
+import {createAppSlice} from "../../../app/createAppSlice";
 import type {CreateProjectDto, Project, InviteRequestDto, ProjectsSliceState, ProjectLog} from "../types";
 import * as api from "../services/api";
-import { isAxiosError, type AxiosError } from "axios";
 import {createSelector, type PayloadAction} from "@reduxjs/toolkit";
 import type {MarkerDto} from "../../tasks/types";
 import {fetchProjectLogs} from "../services/api";
-import i18n from "i18next";
+import {throwLocalizedAxiosError} from "../../../utils/apiErrorHandler";
 
 const initialState: ProjectsSliceState = {
     projects: [],
@@ -21,11 +20,11 @@ export const projectsSlice = createAppSlice({
     reducers: (create) => ({
         getMyProjects: create.asyncThunk(
             async () => {
-                return api
-                    .fetchMyProjects()
-                    .catch((err: AxiosError<{ message: string }>) => {
-                        throw new Error(err.response?.data?.message);
-                    });
+                try {
+                    return await api.fetchMyProjects();
+                } catch (err) {
+                    return throwLocalizedAxiosError(err, "errors.internalServer");
+                }
             },
             {
                 pending: (state) => {
@@ -44,13 +43,11 @@ export const projectsSlice = createAppSlice({
 
         createProject: create.asyncThunk(
             async (dto: CreateProjectDto) => {
-                return api.fetchCreateProject(dto).catch((err) => {
-                    if (isAxiosError(err)) {
-                        throw new Error(
-                            err.response?.data?.message || i18n.t("errors.internalServer")
-                        );
-                    }
-                });
+                try {
+                    return await api.fetchCreateProject(dto);
+                } catch (err) {
+                    return throwLocalizedAxiosError(err, "errors.internalServer");
+                }
             },
             {
                 pending: (state) => {
@@ -67,16 +64,11 @@ export const projectsSlice = createAppSlice({
             }
         ),
         updateProject: create.asyncThunk(
-            async (
-                { id, dto }: { id: string; dto: CreateProjectDto }
-            ): Promise<Project> => {
+            async ({id, dto}: { id: string; dto: CreateProjectDto }): Promise<Project> => {
                 try {
                     return await api.fetchUpdateProject(id, dto);
                 } catch (err) {
-                    if (isAxiosError(err)) {
-                        throw new Error(err.response?.data?.message || i18n.t("errors.updateProject"));
-                    }
-                    throw err;
+                    return throwLocalizedAxiosError(err, "errors.updateProject");
                 }
             },
             {
@@ -102,7 +94,8 @@ export const projectsSlice = createAppSlice({
                             ...state.currentProject,
                             ...updatedProject,
                         };
-                    }              },
+                    }
+                },
                 rejected: (state, action) => {
                     state.isUpdatingProject = false;
                     state.updateProjectErrorMessage = action.error.message;
@@ -112,12 +105,12 @@ export const projectsSlice = createAppSlice({
 
 
         getProjectById: create.asyncThunk(
-            async (id: string):Promise<Project> => {
-                return api.fetchProjectById(id).catch(
-                    (err: AxiosError<{ message: string }>) => {
-                        throw new Error(err.response?.data?.message);
-                    }
-                );
+            async (id: string): Promise<Project> => {
+                try {
+                    return await api.fetchProjectById(id);
+                } catch (err) {
+                    return throwLocalizedAxiosError(err, "errors.internalServer");
+                }
             },
             {
                 pending: (state) => {
@@ -136,14 +129,11 @@ export const projectsSlice = createAppSlice({
             }
         ),
         inviteUser: create.asyncThunk(
-            async ({ id, dto }: { id: string; dto: InviteRequestDto }) => {
+            async ({id, dto}: { id: string; dto: InviteRequestDto }) => {
                 try {
                     return await api.fetchInviteUser(id, dto);
                 } catch (err) {
-                    if (isAxiosError(err)) {
-                        throw new Error(err.response?.data?.message || i18n.t("errors.inviteUser"));
-                    }
-                    throw err;
+                    return throwLocalizedAxiosError(err, "errors.inviteUser");
                 }
             },
             {
@@ -212,12 +202,11 @@ export const projectsSlice = createAppSlice({
 
         getProjectLogs: create.asyncThunk(
             async (projectId: string): Promise<ProjectLog[]> => {
-                return fetchProjectLogs(projectId).catch((error) => {
-                    if (isAxiosError(error)) {
-                        throw new Error(error.response?.data?.message || i18n.t("errors.fetchProjectLogs"));
-                    }
-                    throw error;
-                });
+                try {
+                    return await fetchProjectLogs(projectId);
+                } catch (err) {
+                    return throwLocalizedAxiosError(err, "errors.fetchProjectLogs");
+                }
             },
             {
                 pending: (state) => {
@@ -242,10 +231,7 @@ export const projectsSlice = createAppSlice({
                     await api.fetchDeleteProject(id);
                     return id;
                 } catch (err) {
-                    if (isAxiosError(err)) {
-                        throw new Error(err.response?.data?.message || i18n.t("errors.deleteProject"));
-                    }
-                    throw err;
+                    return throwLocalizedAxiosError(err, "errors.deleteProject");
                 }
             },
             {
@@ -289,9 +275,11 @@ export const projectsSlice = createAppSlice({
 });
 
 // // Action creators are generated for each case reducer function.
-export const { createProject, updateProject, getMyProjects, getProjectById, inviteUser,
+export const {
+    createProject, updateProject, getMyProjects, getProjectById, inviteUser,
     addMarkerToCurrentProject, removeMarkerFromProject,
-    deleteProject, getProjectLogs,clearDeleteError } = projectsSlice.actions;
+    deleteProject, getProjectLogs, clearDeleteError
+} = projectsSlice.actions;
 
 // Selectors returned by `slice.selectors` take the root state as their first argument.
 export const {
