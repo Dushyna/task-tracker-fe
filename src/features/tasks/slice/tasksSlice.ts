@@ -9,10 +9,9 @@ import type {
     UpdateTaskPayload
 } from "../types";
 import * as api from "../services/api";
-import {isAxiosError, type AxiosError} from "axios";
 import {mapTaskFromApi} from "../mapper/mapper.ts";
 import {current, isDraft, type PayloadAction} from "@reduxjs/toolkit";
-import i18n from "i18next";
+import {throwLocalizedAxiosError} from "../../../utils/apiErrorHandler";
 
 const initialState: TasksSliceState = {
     tasks: [],
@@ -64,11 +63,11 @@ export const tasksSlice = createAppSlice({
         reducers: (create) => ({
             getTasksByProjectId: create.asyncThunk(
                 async (id: string) => {
-                    return api
-                        .fetchTasksByProjectId(id)
-                        .catch((err: AxiosError<{ message: string }>) => {
-                            throw new Error(err.response?.data?.message);
-                        });
+                    try {
+                        return await api.fetchTasksByProjectId(id);
+                    } catch (err) {
+                        return throwLocalizedAxiosError(err, "errors.internalServer");
+                    }
                 },
                 {
                     pending: (state) => {
@@ -89,15 +88,11 @@ export const tasksSlice = createAppSlice({
 
             createTask: create.asyncThunk(
                 async (dto: CreateTaskDto) => {
-                    return api.fetchCreateTask(dto).catch((err) => {
-                        if (isAxiosError(err)) {
-                            throw new Error(
-                                err.response?.data?.message || i18n.t("errors.internalServer")
-                            );
-                        }
-                        throw err;
-                    });
-                    // The value we return becomes the `fulfilled` action payload
+                    try {
+                        return await api.fetchCreateTask(dto);
+                    } catch (err) {
+                        return throwLocalizedAxiosError(err, "errors.internalServer");
+                    }
                 },
                 {
                     pending: (state) => {
@@ -119,15 +114,11 @@ export const tasksSlice = createAppSlice({
 
             updateTask: create.asyncThunk(
                 async ({id, dto}: UpdateTaskPayload) => {
-                    return api.fetchUpdateTask(id, dto).catch((err) => {
-                        if (isAxiosError(err)) {
-                            throw new Error(
-                                err.response?.data?.message || i18n.t("errors.internalServer")
-                            );
-                        }
-                        throw err;
-                    });
-                    // The value we return becomes the `fulfilled` action payload
+                    try {
+                        return await api.fetchUpdateTask(id, dto);
+                    } catch (err) {
+                        return throwLocalizedAxiosError(err, "errors.internalServer");
+                    }
                 },
                 {
                     pending: (state, action) => {
@@ -225,8 +216,12 @@ export const tasksSlice = createAppSlice({
 
             deleteTask: create.asyncThunk(
                 async (id: string) => {
-                    await api.fetchDeleteTask(id);
-                    return id;
+                    try {
+                        await api.fetchDeleteTask(id);
+                        return id;
+                    } catch (err) {
+                        return throwLocalizedAxiosError(err, "errors.deleteFailed");
+                    }
                 },
                 {
                     pending: (state) => {
@@ -244,7 +239,11 @@ export const tasksSlice = createAppSlice({
 
             uploadTaskAttachment: create.asyncThunk(
                 async ({taskId, file}: { taskId: string; file: File }) => {
-                    return await api.uploadAttachment(taskId, file);
+                    try {
+                        return await api.uploadAttachment(taskId, file);
+                    } catch (err) {
+                        return throwLocalizedAxiosError(err, "errors.uploadFile");
+                    }
                 },
                 {
                     pending: (state) => {
@@ -264,15 +263,19 @@ export const tasksSlice = createAppSlice({
                     },
                     rejected: (state, action) => {
                         state.isLoading = false;
-                        state.createTaskErrorMessage = action.error.message || "Failed to upload file";
+                        state.createTaskErrorMessage = action.error.message;
                     },
                 }
             ),
 
             deleteTaskAttachment: create.asyncThunk(
                 async ({taskId, attachmentId}: { taskId: string; attachmentId: string }) => {
-                    await api.deleteAttachment(taskId, attachmentId);
-                    return {taskId, attachmentId};
+                    try {
+                        await api.deleteAttachment(taskId, attachmentId);
+                        return {taskId, attachmentId};
+                    } catch (err) {
+                        return throwLocalizedAxiosError(err, "errors.deleteAttachment");
+                    }
                 },
                 {
                     fulfilled: (state, action) => {
@@ -283,20 +286,19 @@ export const tasksSlice = createAppSlice({
                         }
 
                     },
-                    rejected: (state) => {
-                        state.createTaskErrorMessage = "Failed to delete attachment";
+                    rejected: (state, action) => {
+                        state.createTaskErrorMessage = action.error.message;
                     }
                 }
             ),
 
             getComments: create.asyncThunk(
                 async (taskId: string) => {
-                    return api.fetchComments(taskId).catch((err) => {
-                        if (isAxiosError(err)) {
-                            throw new Error(err.response?.data?.message || i18n.t("errors.fetchComments"));
-                        }
-                        throw err;
-                    });
+                    try {
+                        return await api.fetchComments(taskId);
+                    } catch (err) {
+                        return throwLocalizedAxiosError(err, "errors.fetchComments");
+                    }
                 },
                 {
                     pending: (state) => {
@@ -312,13 +314,12 @@ export const tasksSlice = createAppSlice({
             ),
 
             addComment: create.asyncThunk(
-                async ({taskId, text}: { taskId: string, text: string }) => {
-                    return api.fetchAddComment(taskId, text).catch((err) => {
-                        if (isAxiosError(err)) {
-                            throw new Error(err.response?.data?.message || i18n.t("errors.addComment"));
-                        }
-                        throw err;
-                    });
+                async ({taskId, text}: { taskId: string; text: string }) => {
+                    try {
+                        return await api.fetchAddComment(taskId, text);
+                    } catch (err) {
+                        return throwLocalizedAxiosError(err, "errors.addComment");
+                    }
                 },
                 {
                     fulfilled: (state, action) => {
@@ -331,15 +332,12 @@ export const tasksSlice = createAppSlice({
             ),
 
             deleteComment: create.asyncThunk(
-                async ({taskId, commentId}: { taskId: string, commentId: string }) => {
+                async ({taskId, commentId}: { taskId: string; commentId: string }) => {
                     try {
                         await api.fetchDeleteComment(taskId, commentId);
                         return commentId;
                     } catch (err) {
-                        if (isAxiosError(err)) {
-                            throw new Error(err.response?.data?.message || i18n.t("errors.deleteFailed"));
-                        }
-                        throw err;
+                        return throwLocalizedAxiosError(err, "errors.deleteFailed");
                     }
                 },
                 {
@@ -358,14 +356,11 @@ export const tasksSlice = createAppSlice({
             ),
 
             updateComment: create.asyncThunk(
-                async ({taskId, commentId, text}: { taskId: string, commentId: string, text: string }) => {
+                async ({taskId, commentId, text}: { taskId: string; commentId: string; text: string }) => {
                     try {
                         return await api.fetchUpdateComment(taskId, commentId, text);
                     } catch (err) {
-                        if (isAxiosError(err)) {
-                            throw new Error(err.response?.data?.message || i18n.t("errors.forbidden"));
-                        }
-                        throw err;
+                        return throwLocalizedAxiosError(err, "errors.forbidden");
                     }
                 },
                 {
