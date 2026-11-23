@@ -9,17 +9,17 @@ Moderne Kanban-Projekt- und Aufgabenverwaltungs-Webanwendung entwickelt mit **Re
 ## ✨ Hauptfunktionen
 
 * **Projekt- & Board-Verwaltung**: Erstellen und Bearbeiten von Projekten, Einladen von Teammitgliedern sowie Rollenverwaltung.
-* **Interaktives Kanban-Board**: Drag-and-Drop für Spalten (Status) und Aufgabenkarten (`@dnd-kit`), Echtzeit-Suche und Filterung.
+* **Interaktives Kanban-Board**: Drag-and-Drop für Spalten (Status) und Aufgabenkarten (`@dnd-kit`), Echtzeit-Suche, Marker-Filterung sowie optimistische UI-Updates mit automatischem Rollback bei Serverfehlern.
 * **Aufgabendetails**: Checklisten, Dateianhänge, Kommentare, Fälligkeitsdaten und Prioritäten.
 * **Aktivitätsprotokoll (Project Logs)**: Nachvollziehbare Historie aller Projekt- und Aufgabenänderungen.
-* **Mehrsprachigkeit (DE / EN)**: Vollständige Lokalisierung der Benutzeroberfläche, Formularvalidierung, Datumsformate und Fehlermeldungen mit Sprachumschalter im Header.
+* **Mehrsprachigkeit (DE / EN)**: Vollständige Lokalisierung der Benutzeroberfläche, Formularvalidierung, Datumsformate und Backend-Fehlermeldungen mit Sprachumschalter im Header.
 * **Authentifizierung & Profil**: Registrierung, Login, Passwort-Reset sowie Profil- und Avatar-Verwaltung.
 
 ---
 
 ## 🛠️ Tech-Stack
 
-* **Core**: React 19, TypeScript, Vite
+* **Core**: React 19, TypeScript, Vite (inkl. Vendor-Chunk-Splitting)
 * **State Management**: Redux Toolkit (`combineSlices`, `createAppSlice`)
 * **Routing**: React Router
 * **Styling**: Tailwind CSS
@@ -27,6 +27,7 @@ Moderne Kanban-Projekt- und Aufgabenverwaltungs-Webanwendung entwickelt mit **Re
 * **Internationalisierung (i18n)**: `i18next`, `react-i18next`, `i18next-browser-languagedetector`, `date-fns`
 * **Drag & Drop**: `@dnd-kit/core`, `@dnd-kit/sortable`
 * **HTTP-Client**: Axios (mit Interceptors & Cookie-basierter Authentifizierung)
+* **Testing**: Vitest (Unit-Tests für Error-Mapping & Redux-Slices)
 
 ---
 
@@ -49,6 +50,8 @@ Moderne Kanban-Projekt- und Aufgabenverwaltungs-Webanwendung entwickelt mit **Re
 
 4. **Weitere Skripte:**
    ```bash
+   npm run test     # Unit-Tests im Watch-Modus starten
+   npm run test:run # Alle Unit-Tests einmalig ausführen
    npm run build    # Production-Build erstellen
    npm run preview  # Production-Build lokal testen
    npm run lint     # Code-Qualität mit ESLint prüfen
@@ -60,11 +63,7 @@ Moderne Kanban-Projekt- und Aufgabenverwaltungs-Webanwendung entwickelt mit **Re
 
 Die Anwendung kann direkt über die Live-Demo getestet werden:
 * **URL:** [https://dushyna.site](https://dushyna.site)
-* **Registrierung:** Ein eigener Account kann jederzeit kostenlos über die Registrierungsseite erstellt werden.
-<!-- Optional: Falls du einen festen Demo-Account angeben möchtest, kannst du ihn hier ergänzen:
-* **Demo-E-Mail:** `demo@example.com`
-* **Demo-Passwort:** `Demo1234!`
--->
+* **Quick Demo Login / Registrierung:** Über die Login- und Registrierungsseite kann die Anwendung sofort im Demo-Modus oder mit einem eigenen kostenlosen Account getestet werden.
 
 ---
 
@@ -84,14 +83,30 @@ Für die globale Zustandsverwaltung wird **Redux Toolkit (RTK)** eingesetzt. Die
 
 * **Store-Setup (`/src/app/store.ts`)**: Neue Slices werden direkt über `combineSlices` zusammengeführt – ein manuelles Registrieren in `combineReducers` ist nicht erforderlich. Die `makeStore`-Factory erleichtert die Wiederverwendung der Store-Konfiguration (z. B. für Tests mit `preloadedState`).
 * **`createAppSlice` (`/src/app/createAppSlice.ts`)**: Ermöglicht das Definieren von asynchronen Thunks (`asyncThunkCreator`) direkt innerhalb der Slices.
+* **Optimistische Updates (`tasksSlice.ts`)**: Änderungen an Aufgaben werden sofort in der UI angewendet, über Snapshots (`taskSnapshots`) abgesichert und bei einem Fehler automatisch auf den vorherigen Zustand zurückgesetzt.
 * **Typisierte Hooks (`/src/app/hooks.ts`)**: Im gesamten Projekt werden für den Zugriff auf den Store ausschließlich die vordefinierten Hooks `useAppDispatch` und `useAppSelector` verwendet.
-
 ---
 
 ## 📡 API-Anfragen & Fehlerbehandlung
 
 * **Axios-Instanz (`/src/lib/axiosInstance.ts`)**: Zentrale HTTP-Konfiguration mit Unterstützung für Cookie-basierte Authentifizierung und automatisches Token-Handling.
-* **Lokalisierte Fehlerbehandlung**: Server- und Netzwerkfehler in den Redux-Slices werden abgefangen und über `i18next` sprachabhängig aufbereitet (siehe z. B. `/src/features/auth/slice/authSlice.ts` und `/src/features/user/slice/userSlice.ts`).
+* **Zentralisiertes Error-Mapping (`/src/utils/apiErrorHandler.ts`)**: Die Hilfsfunktionen `getLocalizedApiError` und `throwLocalizedAxiosError` übersetzen alle Spring-Boot-Backend-Fehlermeldungen (Auth, Security, Mail, Avatar, Project, Collaborator, Task, TaskStatus, Attachment, Comment) sowie HTTP-Statuscodes (z. B. `409 Conflict`) und dynamische Präfixe (`User not found: ...`) zentral über `i18next`. Diese Logik ist in allen fünf Redux-Slices integriert.
+
+---
+
+## ⚡ Performance & Bundle-Optimierung
+
+* **Code-Splitting (`vite.config.ts`)**: Über `build.rollupOptions.output.manualChunks` werden Drittanbieter-Bibliotheken gezielt in dedizierte Vendor-Chunks aufgeteilt (`vendor-react`, `vendor-redux`, `vendor-dnd`, `vendor-i18n`, `vendor-forms`, `vendor-utils`).
+* **Ergebnis**: Der Haupt-Chunk `index.js` wurde dadurch von **~728 kB** auf **~188 kB** (~47.8 kB gzip) reduziert, was das Browser-Caching verbessert und die Ladezeiten optimiert.
+
+---
+
+## 🧪 Testing mit Vitest
+
+Das Projekt verfügt über eine automatisierte Unit-Test-Suite (**72 Tests in 6 Testdateien**) auf Basis von **Vitest**:
+
+* **Error-Handler-Tests (`/src/utils/apiErrorHandler.test.ts`)**: Prüfen alle Backend-Fehlermappings, HTTP-Status-Fallbacks, dynamische E-Mail-Präfixe und das Werfen lokalisierter Exceptions.
+* **Redux-Slice-Tests (`*.test.ts` neben den jeweiligen Slices)**: Testen initiale Zustände, Selektoren, synchrone Reducer sowie komplette asynchrone Thunk-Zyklen (`pending` -> `fulfilled` -> `rejected` inkl. Rollback bei optimistischen Updates) für `authSlice`, `userSlice`, `projectsSlice`, `taskStatusSlice` und `tasksSlice`.
 
 ---
 
@@ -136,21 +151,21 @@ src/
 ├── lib/          # Konfiguration externer Bibliotheken (axiosInstance.ts)
 ├── pages/        # Seitenkomponenten entsprechend den Routen
 ├── types/        # Globale TypeScript-Typen & Interfaces
-└── utils/        # Allgemeine Hilfsfunktionen (z. B. projectLogFormatter.ts)
+└── utils/        # Hilfsfunktionen & Tests (apiErrorHandler.ts, projectLogFormatter.ts)
 ```
 
 Aufbau innerhalb jedes Features:
 
-| Ordner / Datei | Zweck                                         |
-|----------------|-----------------------------------------------|
-| `components/`  | Feature-spezifische UI-Komponenten            |
-| `slice/`       | Redux-Slice + Geschäftslogik                  |
-| `services/`    | API-Anfragen, die zu diesem Feature gehören   |
-| `types/`       | Lokale Typen & DTOs für das jeweilige Feature |
+| Ordner / Datei | Zweck                                                     |
+|----------------|-----------------------------------------------------------|
+| `components/`  | Feature-spezifische UI-Komponenten                        |
+| `slice/`       | Redux-Slice + Geschäftslogik + Unit-Tests (`*.test.ts`)   |
+| `services/`    | API-Anfragen, die zu diesem Feature gehören               |
+| `types/`       | Lokale Typen & DTOs für das jeweilige Feature             |
 
 ---
 
 ## 🚀 CI/CD & Deployment
 
-* **CI/CD-Pipeline (`/.github/workflows/ci.yml`)**: Bei jedem `push` oder `pull_request` auf `develop` und `main` werden automatisch Abhängigkeiten installiert, der Linter ausgeführt (`npm run lint`) und der Production-Build geprüft (`npm run build`). Bei einem Push auf `develop` erfolgt anschließend das automatische Deployment per SSH auf den VPS.
+* **CI/CD-Pipeline (`/.github/workflows/ci.yml`)**: Bei jedem `push` oder `pull_request` auf `develop` und `main` werden unter Node.js 20 automatisch Abhängigkeiten installiert, der Linter ausgeführt (`npm run lint`), alle Unit-Tests gestartet (`npm run test:run`) und der Production-Build geprüft (`npm run build`). Bei einem Push auf `develop` erfolgt anschließend das automatische Deployment per SSH auf den Ionos VPS.
 * **Docker & Nginx (`/Dockerfile`, `/nginx/default.conf`)**: Die Anwendung wird als Container gebaut und über Nginx mit HTTPS-Unterstützung (Let's Encrypt SSL) ausgeliefert.
